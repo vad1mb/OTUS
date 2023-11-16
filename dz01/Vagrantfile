@@ -1,0 +1,7 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "vadb/centos-8-kernel-6"
+  config.vm.box_version = "231113"
+  config.vm.provider "virtualbox" do |vb|
+    vb.gui = false
+  end
+end

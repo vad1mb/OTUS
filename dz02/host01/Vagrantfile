@@ -1,0 +1,20 @@
+Vagrant.configure("2") do |config|
+    # образ системы
+    config.vm.box = "centos/7"
+
+    # hostname виртуальной машины
+    config.vm.hostname = "host01"
+    
+    # не проверять репозиторий на наличие обновлений
+    config.vm.box_check_update = false
+    
+    # настройка сети (сетевой мост на втором интерфейсе)
+    config.vm.network "public_network", bridge: "Realtek PCIe GbE Family Controller", ip: "192.168.0.211"
+    #config.vm.network "public_network", bridge: "Realtek PCIe GbE Family Controller"
+
+    config.vm.provider "virtualbox" do |vb|
+      vb.name = "host01"
+      vb.memory = 512
+      vb.cpus = 1
+    end
+end
