@@ -112,10 +112,9 @@ Host default
 
 **Архив с плейбуком и настройками ansible_conf.zip необходимо распаковать на хосте mng**
 
-В файле host проверить актуальный ip-адрес для host01
-
 *Этот момент с ключом и архивом меня смущает. Я не знаю как это сделать красиво (⊙_⊙;)*
 
+В файле host проверить актуальный ip-адрес для host01
 ```bash
 [web]
 nginx ansible_host=192.168.0.29 ansible_port=22 ansible_user=vagrant ansible_private_key_file=~/private.key
