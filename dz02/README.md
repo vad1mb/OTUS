@@ -108,8 +108,7 @@ Host default
 
 Содержимое файла dz02/host01/.vagrant/machines/default/virtualbox/private_key необходимо скопировать в файл private.key (выставляем права 0600) на хост mng, что бы можно было подключаться к host01 по ssh.
 
-**Архив с плейбуком и настройками ansible_conf.zip необходимо распаковать на хосте mng 
-**
+**Архив с плейбуком и настройками ansible_conf.zip необходимо распаковать на хосте mng**
 В файле host проверить актуальный ip-адрес для host01
 
 ```bash
