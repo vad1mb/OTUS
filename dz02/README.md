@@ -24,7 +24,7 @@
 
 Для отработки подготавливаем две виртуальные машины в VirtualBox: 
 
-![virtual.drawio.png](%D0%94%D0%BE%D0%BC%D0%B0%D1%88%D0%BD%D0%B5%D0%B5%20%D0%B7%D0%B0%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5%202%20Ansible%20fe719e74adea47e6a265f6043da411be/virtual.drawio.png)
+![virtual.drawio.png]
 
 **mng** (ip: 192.168.0.210) - управляющий хост:
 
