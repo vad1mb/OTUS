@@ -24,7 +24,7 @@
 
 Для отработки подготавливаем две виртуальные машины в VirtualBox: 
 
-![virtual.drawio.png]
+![virtual.drawio.png](virtual.drawio.png)
 
 **mng** (ip: 192.168.0.210) - управляющий хост:
 
