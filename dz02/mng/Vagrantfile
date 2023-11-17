@@ -22,10 +22,10 @@ Vagrant.configure("2") do |config|
         vb.cpus = "1"
     end
 
-    # Устанавливаем Ansible и unzip
+    # Устанавливаем Ansible и unzip 
     config.vm.provision "shell", inline: <<-SHELL
       sudo apt update
-      sudo apt install unzip software-properties-common -y
+      sudo apt install unzip software-properties-common -y 
       sudo apt-add-repository --yes --update ppa:ansible/ansible
       sudo apt install ansible -y
     SHELL
