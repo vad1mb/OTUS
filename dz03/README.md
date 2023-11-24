@@ -112,6 +112,7 @@ Vagrantfile, который сразу собирает систему с под
     ```
     
     Обнуляем суперблоки (на случай, если какие-то диски уже были в массивах):
+    
     `sudo mdadm --zero-superblock --force /dev/sd{b,c,d,e,f}`
     
     Создаем массив RAID10 из 4х дисков
@@ -191,8 +192,11 @@ Vagrantfile, который сразу собирает систему с под
     Создаем ФС и монтируем
     
     Создаем таблицу разделов GPT на RAID.
+
     `parted -s /dev/md0 mklabel gpt`
+
     Создаём разделы на массиве:
+
     
     ```bash
     parted /dev/md0 mkpart primary ext4 0% 20%
@@ -203,8 +207,10 @@ Vagrantfile, который сразу собирает систему с под
     ```
     
     Далее можно создать на этих разделах файловые системы
+
     `for i in $(seq 1 5); do sudo mkfs.ext4 /dev/md0p$i; done`
     И смонтировать их по каталогам:
+
     `mkdir -p /raid/part{1,2,3,4,5}
      for i in $(seq 1 5); do mount /dev/md0p$i /raid/part$i; done`
     
@@ -214,7 +220,7 @@ Vagrantfile, который сразу собирает систему с под
     
     ### Имитация поломки диска
     
-    Начальное состояние [см. выше](https://www.notion.so/3-mdadm-8541473b92de4c2596564b3c2bff2168?pvs=21)
+    Начальное состояние см. выше
     
     ```bash
     cat /proc/mdstat
