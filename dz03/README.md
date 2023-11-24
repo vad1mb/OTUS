@@ -299,7 +299,7 @@ Vagrantfile, который сразу собирает систему с под
     5       8       64        -      spare   /dev/sde
     ```
     
-- Итоговый Vagrantfile и скрипт provision.sh
+- Итоговый [Vagrantfile] (./Vagrantfile) и скрипт [provision.sh] (./provision.sh)
     
     Vagrantfile:
     
