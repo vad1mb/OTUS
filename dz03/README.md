@@ -299,5 +299,5 @@ Vagrantfile, который сразу собирает систему с под
     5       8       64        -      spare   /dev/sde
     ```
     
-- Итоговый [Vagrantfile](Vagrantfile) и скрипт [provision.sh](provision.sh)
+- Итоговый [Vagrantfile](Vagrantfile) и скрипт [provision.sh](provision.sh).
   Склонировать проект, запустить - vagrant up, далее - vagrant provision.
