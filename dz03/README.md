@@ -189,14 +189,13 @@ Vagrantfile, который сразу собирает систему с под
     sudo mdadm --detail --scan --verbose | awk '/ARRAY/ {print}' >> /etc/mdadm/mdadm.conf
     ```
     
-    Создаем ФС и монтируем
+   - Создаем ФС и монтируем
     
     Создаем таблицу разделов GPT на RAID.
 
     `parted -s /dev/md0 mklabel gpt`
 
     Создаём разделы на массиве:
-
     
     ```bash
     parted /dev/md0 mkpart primary ext4 0% 20%
@@ -209,6 +208,7 @@ Vagrantfile, который сразу собирает систему с под
     Далее можно создать на этих разделах файловые системы
 
     `for i in $(seq 1 5); do sudo mkfs.ext4 /dev/md0p$i; done`
+
     И смонтировать их по каталогам:
 
     `mkdir -p /raid/part{1,2,3,4,5}
@@ -220,7 +220,7 @@ Vagrantfile, который сразу собирает систему с под
     
     ### Имитация поломки диска
     
-    Начальное состояние см. выше
+    Начальное состояние
     
     ```bash
     cat /proc/mdstat
@@ -300,3 +300,4 @@ Vagrantfile, который сразу собирает систему с под
     ```
     
 - Итоговый [Vagrantfile](Vagrantfile) и скрипт [provision.sh](provision.sh)
+  Склонировать проект, запустить - vagrant up, далее - vagrant provision.
