@@ -189,14 +189,13 @@ Vagrantfile, который сразу собирает систему с под
     sudo mdadm --detail --scan --verbose | awk '/ARRAY/ {print}' >> /etc/mdadm/mdadm.conf
     ```
     
-    Создаем ФС и монтируем
+   - Создаем ФС и монтируем
     
     Создаем таблицу разделов GPT на RAID.
 
     `parted -s /dev/md0 mklabel gpt`
 
     Создаём разделы на массиве:
-
     
     ```bash
     parted /dev/md0 mkpart primary ext4 0% 20%
@@ -209,6 +208,7 @@ Vagrantfile, который сразу собирает систему с под
     Далее можно создать на этих разделах файловые системы
 
     `for i in $(seq 1 5); do sudo mkfs.ext4 /dev/md0p$i; done`
+
     И смонтировать их по каталогам:
 
     `mkdir -p /raid/part{1,2,3,4,5}
@@ -220,7 +220,7 @@ Vagrantfile, который сразу собирает систему с под
     
     ### Имитация поломки диска
     
-    Начальное состояние см. выше
+    Начальное состояние
     
     ```bash
     cat /proc/mdstat
@@ -299,128 +299,5 @@ Vagrantfile, который сразу собирает систему с под
     5       8       64        -      spare   /dev/sde
     ```
     
-- Итоговый Vagrantfile и скрипт provision.sh
-    
-    Vagrantfile:
-    
-    ```ruby
-    # -*- mode: ruby -*-
-    # vim: set ft=ruby :
-    
-    MACHINES = {
-        :otuslinux => {
-            :box_name => "centos/7",
-            :ip_addr => '192.168.56.101',
-            :disks => {
-                :sata1 => {
-                    :dfile => './sata1.vdi',
-                    :size => 250,
-                    :port => 1
-                },
-                :sata2 => {
-                    :dfile => './sata2.vdi',
-                    :size => 250,
-                    :port => 2
-                },
-                :sata3 => {
-                    :dfile => './sata3.vdi',
-                    :size => 250,
-                    :port => 3
-                },
-                :sata4 => {
-                    :dfile => './sata4.vdi',
-                    :size => 250,
-                    :port => 4
-                },
-                :sata5 => {
-                    :dfile => './sata5.vdi',
-                    :size => 250,
-                    :port => 5
-                }
-            }
-        },
-    }
-    
-    Vagrant.configure("2") do |config|
-    
-      MACHINES.each do |boxname, boxconfig|
-    
-          config.vm.define boxname do |box|
-    
-              box.vm.box = boxconfig[:box_name]
-              box.vm.host_name = boxname.to_s
-              box.vm.network "private_network", ip: boxconfig[:ip_addr]
-    
-              box.vm.provider :virtualbox do |vb|
-                	  vb.customize ["modifyvm", :id, "--memory", "1024"]
-                      needsController = false
-    		  boxconfig[:disks].each do |dname, dconf|
-    			  unless File.exist?(dconf[:dfile])
-    				vb.customize ['createhd', '--filename', dconf[:dfile], '--variant', 'Fixed', '--size', dconf[:size]]
-                                    needsController =  true
-                              end
-    		  end
-                      if needsController == true
-                         vb.customize ["storagectl", :id, "--name", "SATA", "--add", "sata" ]
-                         boxconfig[:disks].each do |dname, dconf|
-                             vb.customize ['storageattach', :id,  '--storagectl', 'SATA', '--port', dconf[:port], '--device', 0, '--type', 'hdd', '--medium', dconf[:dfile]]
-                         end
-                      end
-              end
-     	  box.vm.provision "shell", path: "provision.sh"
-          end
-      end
-    end
-    ```
-    
-    Скрипт provision.sh:
-    
-    ```bash
-    #!/bin/bash
-    
-    mkdir -p ~root/.ssh
-    cp ~vagrant/.ssh/auth* ~root/.ssh
-    
-    # Обновление списка пакетов и установка mdadm martmontools hdparm gdisk
-    sudo yum update
-    sudo yum install -y mdadm smartmontools hdparm gdisk
-    
-    # Проверка существование метаустройства
-    if grep -q "/dev/md0" /etc/fstab; then
-      echo -e "\nMetadevice /dev/md0 is present! \nPlease unmount metadevice and move the corresponding line in /etc/fstab."
-      exit
-    fi
-    
-    # Создание массива RAID 10
-    sudo mdadm --zero-superblock --force /dev/sd{b,c,d,e,f}
-    sudo mdadm --create --verbose /dev/md0 --level=10 --raid-devices=4 /dev/sd{b,c,d,e}
-    # Добавляем диск под hotspare
-    sudo mdadm --add /dev/md0 /dev/sdf
-    
-    # Ожидание завершения ссоздания и готовности метадевайса
-    echo -e "\nWaiting for metadevice creation 60s..."
-    sleep 60
-    # Можно в цикле отслеживать greep-ом статус готовности (синхронизации) метадевайса, но мне лень :)
-    
-    # Создаем таблицу разделов GPT 
-    sudo parted -s /dev/md0 mklabel gpt
-    
-    # Создаем 5 разделов
-    sudo parted /dev/md0 mkpart primary ext4 0% 20%
-    sudo parted /dev/md0 mkpart primary ext4 20% 40%
-    sudo parted /dev/md0 mkpart primary ext4 40% 60%
-    sudo parted /dev/md0 mkpart primary ext4 60% 80%
-    sudo parted /dev/md0 mkpart primary ext4 80% 100%
-    
-    # Создаем ФС и монтируем
-    for i in $(seq 1 5); do sudo mkfs.ext4 /dev/md0p$i; done
-    mkdir -p /raid/part{1,2,3,4,5}
-    for i in $(seq 1 5); do mount /dev/md0p$i /raid/part$i; done
-    
-    # Добавление строки монтирования в fstab
-    for i in $(seq 1 5); do echo "/dev/md0p$i /raid/part$i ext4 defaults 0 0" | sudo tee -a /etc/fstab ; done
-    
-    # Вывод для информации
-    df -hT
-    sudo mdadm -D /dev/md0
-    ```
+- Итоговый [Vagrantfile](Vagrantfile) и скрипт [provision.sh](provision.sh).
+  Склонировать проект, запустить - vagrant up, далее - vagrant provision.
