@@ -170,7 +170,7 @@ zfs receive otus/test@today < otus_task2.file
 find /otus/test -name "secret_message"
 /otus/test/task1/file_mess/secret_message
 
-Читаем найденый файл
+# Читаем найденый файл
 cat /otus/test/task1/file_mess/secret_message
 https://github.com/sindresorhus/awesome
 ```
