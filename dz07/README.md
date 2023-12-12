@@ -62,7 +62,7 @@ nano /root/rpmbuild/SPECS/nginx.spec
 ./configure %{BASE_CONFIGURE_ARGS} \
     --with-cc-opt="%{WITH_CC_OPT}" \
     --with-ld-opt="%{WITH_LD_OPT}" \
-		--with-openssl=/root/openssl-OpenSSL_1_1_1-stable \  # << Добавляем ключ для сборки с SSL
+    --with-openssl=/root/openssl-OpenSSL_1_1_1-stable \  # << Добавляем ключ для сборки с SSL
     --with-debug
 ...
 ```
