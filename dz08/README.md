@@ -108,7 +108,7 @@ Filesystem                Size  Used Avail Use% Mounted on
 /dev/mapper/vg0-LogVol00   38G  878M   37G   3% /
 ```
 
-## Добавить модуль в init.rd
+## 3. Добавить модуль в init.rd
 
 Добавляем свой модуль 01test путем создания директории 
 
