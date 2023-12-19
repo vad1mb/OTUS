@@ -22,13 +22,13 @@
 
 При запуске ВМ (grub) нажимаем клавишу **e** и переходим в режим редактирования. В конце строки начинающейся на linux16 дописываем **rd.break**
 
-![Untitled](%D0%94%D0%BE%D0%BC%D0%B0%D1%88%D0%BD%D0%B5%D0%B5%20%D0%B7%D0%B0%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5%208%20%D0%97%D0%B0%D0%B3%D1%80%D1%83%D0%B7%D0%BA%D0%B0%20Linux%207b8fab80dad74d938cc707dfa3383e6a/Untitled%201.png)
+![Untitled](img/Untitled%201.png)
 
 ### Способ 3
 
 В строке начинающейся на linux16 заменяем ro на rw init=/sysroot/bin/sh 
 
-![Untitled](%D0%94%D0%BE%D0%BC%D0%B0%D1%88%D0%BD%D0%B5%D0%B5%20%D0%B7%D0%B0%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5%208%20%D0%97%D0%B0%D0%B3%D1%80%D1%83%D0%B7%D0%BA%D0%B0%20Linux%207b8fab80dad74d938cc707dfa3383e6a/Untitled%202.png)
+![Untitled](img/Untitled%202.png)
 
 В 1 и 2 способе так же можно поменять ro на rw. Если этого не сделано этого, то необходимо перемонтировать корневую систему в режиме rw.
 
@@ -120,7 +120,7 @@ mkdir /usr/lib/dracut/modules.d/01test
 
 Размещаем в ней два скрипта
 
-1. [module-setup.sh](https://gist.github.com/lalbrekht/e51b2580b47bb5a150bd1a002f16ae85) - который устанавливает модуль и вызывает скрипт [test.sh](http://test.sh/)
+1. [module-setup.sh](https://gist.github.com/lalbrekht/e51b2580b47bb5a150bd1a002f16ae85) - который устанавливает модуль и вызывает скрипт test.sh
 2. [test.sh](https://gist.github.com/lalbrekht/ac45d7a6c6856baea348e64fac43faf0) - собственно сам вызываемый скрипт, в нём у нас рисуется пингвинчик
 
 ```jsx
@@ -157,8 +157,9 @@ test
 
 Перезагружаем и отключаем опции rghb и quiet в grub
 
-![Untitled](%D0%94%D0%BE%D0%BC%D0%B0%D1%88%D0%BD%D0%B5%D0%B5%20%D0%B7%D0%B0%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5%208%20%D0%97%D0%B0%D0%B3%D1%80%D1%83%D0%B7%D0%BA%D0%B0%20Linux%207b8fab80dad74d938cc707dfa3383e6a/Untitled%203.png)
+![Untitled](img/Untitled%203.png)
 
 после чего видим пингвинчика
 
-![Untitled](%D0%94%D0%BE%D0%BC%D0%B0%D1%88%D0%BD%D0%B5%D0%B5%20%D0%B7%D0%B0%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5%208%20%D0%97%D0%B0%D0%B3%D1%80%D1%83%D0%B7%D0%BA%D0%B0%20Linux%207b8fab80dad74d938cc707dfa3383e6a/Untitled%204.png)
+![Untitled](img/Untitled%204.png)
+--------------------
