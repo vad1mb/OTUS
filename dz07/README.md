@@ -136,7 +136,7 @@ nano /etc/nginx/conf.d/default.conf
 location / {
         root   /usr/share/nginx/html;
         index  index.html index.htm;
-        autoindex on;                   << Добавим
+        autoindex on;                   # << Добавим
     }
 
 # Проверяем корректность cofig-файла и рестартуем nginx
