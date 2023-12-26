@@ -21,6 +21,7 @@
 >Для отключения firewall
 >
 >`systemctl stop firewalld.service`
+>
 >`systemctl disable firewalld.service`
 
 # Решение
