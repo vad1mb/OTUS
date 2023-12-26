@@ -12,6 +12,13 @@
 2. Установить spawn-fcgi и переписать init-скрипт на unit-файл (имя service должно называться так же: spawn-fcgi).
 3. Дополнить unit-файл httpd (он же apache2) возможностью запустить несколько инстансов сервера с разными конфигурационными файлами.
 
+<div style="background-color: #fcf8e5; color: #8C6D46; padding: 16px 24px;">
+ <div style="font-size: 16px; font-weight: bold;">⚠ Warning</div>
+ <div style="font-size: 12px">
+ Issue started on (DATE) and is currently active
+ </div>
+</div>
+
 <aside>
 💡 **Отключить SElinux и firewalld.**
 Для отключения SELinux нужно открыть файл /etc/sysconfig/selinux и установить параметр SELINUX=disabled. 
