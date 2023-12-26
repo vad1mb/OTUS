@@ -15,9 +15,11 @@
 >💡 **Отключить SElinux и firewalld.**
 >
 >Для отключения SELinux нужно открыть файл /etc/sysconfig/selinux и установить параметр SELINUX=disabled. 
+>
 >`setenforce 0` - для временного отключения SELinux
 >
 >Для отключения firewall
+>
 >`systemctl stop firewalld.service`
 >`systemctl disable firewalld.service`
 
