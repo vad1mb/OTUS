@@ -1,20 +1,20 @@
 #!/bin/bash
 
-DIR_DATA=./
-#lock_file=$DIR_DATA'/filebash.lock'
-date1=$(date +%Y%m%d-%H%M%S)
-#echo "DEBUG: date1=$date1"
+EMAIL='email@example.ru'
+DIR_DATA=./   # Задаем рабочую директорию 
 access_log=$DIR_DATA/apache_logs.2
+lock_file=$DIR_DATA'/filebash.lock'
+date1=$(date +%Y%m%d-%H%M%S)
 REPORT=$DIR_DATA'/log-'$date1'.txt'
 
+# Проверка, что процесс не запущен
 if [ -f "$lock_file" ]; then
   echo "Процесс уже запущен"
   exit 1
 fi
-#read BASH1 < $DIR_DATA/temp.txt
-#echo "DEBUG: BASH1=$BASH1"
 
-#touch $lock_file
+# Создаем файл-метку запущенного процесса
+touch $lock_file
 
 ## Определяем временной диапазон в log-файле
 echo > $REPORT
@@ -46,13 +46,10 @@ echo "Список всех кодов HTTP ответа" >> $REPORT
 echo "--------------------------------------------------" >> $REPORT
 cat $access_log | awk '{print $9}' | grep '[1-5]' | sort | uniq -c | sort -n -r >> $REPORT
 
-#BASH1=$(sed -n '$=' $access_log)
-#BASH1=$((BASH1 + 1))
-#echo "$BASH1" > $DIR_DATA/temp.txt
-#date_t=$(cat $DIR_DATA/date_temp)
+# Отправка собранной аналитики на e-mail
+#echo 'Аналитика с сервера nginx' | mail -s 'Server Admin nginx report' -A $REPORT $EMAIL
 
-#echo 'Log-файл с сервера nginx за период ' $date_t | mail -s 'Server Admin nginx' -A $REPORT email@example.ru
-
-#rm $lock_file
-#rm $DIR_DATA/date_temp
-
+# Удаляем файл-метку запущенного процесса
+rm $lock_file
+# Удаляем репорт-файл при необходимости.
+# rm -f $REPORT
