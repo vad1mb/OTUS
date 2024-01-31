@@ -167,3 +167,23 @@ Commercial support is available at
 ```
 
 **Hello OTUS from VAD Otus!**
+
+### Размещаем образ в репозитории docker.hub
+
+Создаем учетную запись на [hub.docker.com](http://hub.docker.com/), если не создана ранее.
+Выполняем аутентификацию на хосте с указанием своих учетных данных
+
+```bash
+docker login
+
+```
+
+Пушим образ.
+
+```bash
+docker push vad1mb/otusnginx
+```
+
+Проверяем, что образ присутствует на [hub.docker.com](http://hub.docker.com/)
+
+![Untitled](dockerhub.png)
