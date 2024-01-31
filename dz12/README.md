@@ -16,6 +16,7 @@
 
 - README с описанием каждого решения (скриншоты и демонстрация приветствуются).
 
+
 2. Обеспечить работоспособность приложения при включенном selinux.
 
 - развернуть приложенный стенд [https://github.com/mbfx/otus-linux-adm/tree/master/selinux_dns_problems](https://github.com/mbfx/otus-linux-adm/tree/master/selinux_dns_problems);
