@@ -41,7 +41,9 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 ```
 
 Создаем директорию с проектом
+
 Создаем файлы 
+
 Dockerfile:
 
 ```bash
