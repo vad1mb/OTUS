@@ -1,0 +1,32 @@
+Vagrant.configure("2") do |config|
+    # образ системы
+    config.vm.box = "ubuntu/focal64"
+
+    # hostname виртуальной машины
+    config.vm.hostname = "mng"
+
+    # не проверять репозиторий на наличие обновлений
+    config.vm.box_check_update = false
+
+    # поброс папки
+    #config.vm.synced_folder ".", "/home/vagrant/ansible"
+    
+    # настройка сети (сетевой мост на втором интерфейсе)
+    #config.vm.network "private_network", virtualbox__intnet: "intnet", ip: "192.168.10.10"
+    config.vm.network "public_network", bridge: "Realtek PCIe GbE Family Controller", ip: "192.168.0.210"
+
+    # Устанавливаем параметры виртуальной машины
+    config.vm.provider "virtualbox" do |vb|   
+        vb.name = "mng" 
+        vb.memory = "768"
+        vb.cpus = "1"
+    end
+
+    # Устанавливаем Ansible и unzip 
+    config.vm.provision "shell", inline: <<-SHELL
+      sudo apt update
+      sudo apt install unzip software-properties-common -y 
+      sudo apt-add-repository --yes --update ppa:ansible/ansible
+      sudo apt install ansible -y
+    SHELL
+end
