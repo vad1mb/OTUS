@@ -5,7 +5,7 @@
   tasks:
     - name: Set localtime
       ansible.builtin.file:
-        src: /usr/share/zoneinfo/Europe/Moscow
+        src: /usr/share/zoneinfo/Asia/Irkutsk
         dest: /etc/localtime
         state: link
 
