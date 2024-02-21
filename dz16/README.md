@@ -305,9 +305,9 @@ node=web type=PROCTITLE msg=audit(1708262960.110:978): proctitle=63686D6F64002B7
 
 [hosts](ansible/hosts)
 
-[**provision.yml**](https://www.notion.so/provision-yml-60bc05f7cb17450a9d47d9838f118752?pvs=21)
+[provision.yml](ansible/provision.yml)
 
-Запускаем разворачивание 
+Запускаем разворачивание стенда ВМ, предварительно почистив существующие ВМ
 
 ```bash
 vagrant up
