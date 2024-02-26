@@ -36,7 +36,7 @@ rsync: connection unexpectedly closed (0 bytes received so far) [sender]
 rsync error: error in rsync protocol data stream (code 12) at io.c(231) [sender=3.2.7]
 ```
 
-Данная ошибка прерывает выполнение скриптов из раздела provision
+Данная ошибка прерывает выполнение скриптов из раздела provision. 
 Однозначного решения этой проблемы не найдено.  Для предотвращения этой ошибки отключаем проброс директории в Vagrantfile:
 
 ```ruby
@@ -49,23 +49,23 @@ config.vm.synced_folder ".", "/vagrant", disabled: true
 
 В результате получим 3 хоста: 
 
-**backup** - сервер бэкапов с дополнительным диском на 2Gb
+backup - сервер бэкапов с дополнительным диском на 2Gb
 
-**client** - хост, данные с которого требуется бэкапить
+client - хост, данные с которого требуется бэкапить
 
-**ansible** - хост управления c установленным Ansible и playbooks для настройки хостов backup и client
+ansible - хост управления c установленным Ansible и playbooks для настройки хостов backup и client
 
 Запускаем `vagrant up`. 
 
-[Log запуска хостов](https://www.notion.so/Log-12715c58bfe04085b839a4c9a01bf5ce?pvs=21)
+[Log запуска хостов](log.md)
 
-Подключаемся к хосту **ansible**, создаем ssh-key и прокидываем его на хосты.
+Подключаемся к хосту ansible, создаем ssh-key и прокидываем его на хосты.
 
 ```bash
-**vagrant ssh ansible**
+vagrant ssh ansible
 
 # Выполняем под пользователем vagrant
-**ssh-keygen**
+ssh-keygen
 Generating public/private rsa key pair.
 Enter file in which to save the key (/home/vagrant/.ssh/id_rsa): 
 Enter passphrase (empty for no passphrase): 
@@ -88,31 +88,31 @@ The key's randomart image is:
 +----[SHA256]-----+
 
 # Копируем ключ на хост backup
-**ssh-copy-id vagrant@192.168.11.160**
+ssh-copy-id vagrant@192.168.11.160
 
 # Копируем ключ на хост client
-**ssh-copy-id vagrant@192.168.11.150**
+ssh-copy-id vagrant@192.168.11.150
 ```
 
 Установка ПО borg на хосты client и backup 
 
 ```bash
-**ansible-playbook ./playbooks/borg.yml -i ./inventories/hosts** 
+ansible-playbook ./playbooks/borg.yml -i ./inventories/hosts 
 
-PLAY [all] *********************************************************************************************************************
-TASK [Ping server] *************************************************************************************************************
+PLAY [all] *
+TASK [Ping server] *
 ok: [192.168.11.160]
 ok: [192.168.11.150]
 
-TASK [Install epel-release] ****************************************************************************************************
+TASK [Install epel-release] 
 changed: [192.168.11.160]
 changed: [192.168.11.150]
 
-TASK [Install borgbackup] ******************************************************************************************************
+TASK [Install borgbackup] 
 changed: [192.168.11.160]
 changed: [192.168.11.150]
 
-PLAY RECAP *********************************************************************************************************************
+PLAY RECAP *
 192.168.11.150             : ok=3    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 192.168.11.160             : ok=3    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 ```
@@ -120,35 +120,35 @@ PLAY RECAP *********************************************************************
 Подготовка хоста backup в качестве сервера для бэкапов
 
 ```bash
-**ansible-playbook ./playbooks/backup.yml -i ./inventories/hosts**
+ansible-playbook ./playbooks/backup.yml -i ./inventories/hosts
 
-PLAY [backup] *****************************************************************************************************************  
+PLAY [backup] *  
                                                                                                                                                                                                                  ok
-TASK [Ping server] ************************************************************************************************************
+TASK [Ping server] 
 ok: [192.168.11.160]
                                                                                                                                                                                                                  ch
-TASK [Create new partition] ***************************************************************************************************
+TASK [Create new partition] *
 changed: [192.168.11.160]
                                                                                                                                                                                                                  ch
-TASK [Create ext4 filesystem on /dev/sdb1] ************************************************************************************
+TASK [Create ext4 filesystem on /dev/sdb1] 
 changed: [192.168.11.160]
                                                                                                                                                                                                                  ch
-TASK [Create user Borg] *******************************************************************************************************
+TASK [Create user Borg] *
 changed: [192.168.11.160]
                                                                                                                                                                                                                  ch
-TASK [Create directory /var/backup] *******************************************************************************************
+TASK [Create directory /var/backup] *
 changed: [192.168.11.160]
                                                                                                                                                                                                                  ch
-TASK [Mount sdb1 to /var/backup] **********************************************************************************************
+TASK [Mount sdb1 to /var/backup] 
 changed: [192.168.11.160]
                                                                                                                                                                                                                  ch
-TASK [Create directory /home/borg/.ssh] ***************************************************************************************
+TASK [Create directory /home/borg/.ssh] *
 changed: [192.168.11.160]
                                                                                                                                                                                                                  ch
-TASK [Create file authorized_keys in borg homedirectory] **********************************************************************
+TASK [Create file authorized_keys in borg homedirectory] 
 changed: [192.168.11.160]
                                                                                                                                                                                                                  19
-PLAY RECAP ********************************************************************************************************************
+PLAY RECAP 
 192.168.11.160             : ok=8    changed=7    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 ```
 
@@ -156,35 +156,35 @@ PLAY RECAP *********************************************************************
 
 ## Настройка backup
 
-Действия на хосте **backup**
+Действия на хосте backup
 
 ```bash
-**vagrant ssh backup**
+vagrant ssh backup
 
 # Задаем пароль *borg* для пользователя borg
-**sudo passwd borg**
+sudo passwd borg
 ```
 
-Действия на хосте **client**
+Действия на хосте client
 
 ```bash
-**vagrant ssh client**
+vagrant ssh client
 
-**sudo -i
+sudo -i
 
-ssh-keygen**
+ssh-keygen
 
 # Передаем ключ на хост backup используя вышезаданный пароль
-**ssh-copy-id borg@192.168.11.160**
+ssh-copy-id borg@192.168.11.160
 ```
 
-Инициализируем репозиторий на сервере **backup** с хоста **client**  (для защиты задаём пароль "borg")
+Инициализируем репозиторий на сервере backup с хоста client  (для защиты задаём пароль "borg")
 
-> Почему использую директорию **/var/backup/client_data/**, а не **/var/backup/** как в методичке. Оказывается, при инициализации хранилища система сообщает, что не может этого сделать, т.к. в директории что-то есть. Это что-то - это служебная директория last+found 🤷‍♂️
+> Почему использую директорию /var/backup/client_data/, а не /var/backup/ как в методичке. Оказывается, при инициализации хранилища система сообщает, что не может этого сделать, т.к. в директории что-то есть. Это что-то - это служебная директория last+found 🤷‍♂️
 > 
 
 ```bash
-**borg init --encryption=repokey borg@192.168.11.160:/var/backup/client_data/**
+borg init --encryption=repokey borg@192.168.11.160:/var/backup/client_data/
 Enter new passphrase: 
 Enter same passphrase again:
 Do you want your passphrase to be displayed for verification? [yN]: y
@@ -252,12 +252,12 @@ Chunk index:                    1277                 1692
 
 ```bash
 # Что есть в бэкапе
-**borg list borg@192.168.11.160:/var/backup/client_data/**
+borg list borg@192.168.11.160:/var/backup/client_data/
 Enter passphrase for key ssh://borg@192.168.11.160/var/backup/client_data: 
 etc-2024-02-25_13:07:21              Sun, 2024-02-25 13:07:29 [5d81e64b75f5f635e1991df18751f4291e7b1fc1dd057e92b816f216efa263d3]
 
 # Список файлов 
-**borg list borg@192.168.11.160:/var/backup/client_data/::etc-2024-02-25_13:07:21**
+borg list borg@192.168.11.160:/var/backup/client_data/::etc-2024-02-25_13:07:21
 ...
 -rw-r----- root   root        127 Thu, 2019-08-08 12:06:02 etc/audit/audit-stop.rules
 -rw-r----- root   root        805 Thu, 2019-08-08 12:06:02 etc/audit/auditd.conf
@@ -265,28 +265,28 @@ drwxr-x--- root   root          0 Thu, 2020-04-30 22:09:26 etc/sudoers.d
 -r--r----- root   root         33 Thu, 2020-04-30 22:09:26 etc/sudoers.d/vagrant
 
 # Пробуем достать файлы из бэкапа
-**borg extract borg@192.168.11.160:/var/backup/client_data/::etc-2024-02-25_13:07:21 etc/yum**
+borg extract borg@192.168.11.160:/var/backup/client_data/::etc-2024-02-25_13:07:21 etc/yum
 Enter passphrase for key ssh://borg@192.168.11.160/var/backup/client_data:
 
-**ls -l ./etc**
+ls -l ./etc
 total 0
 drwxr-xr-x. 6 root root 100 Apr 30  2020 yum
 ```
 
 ### Автоматизация backup-ов
 
-Подключаемся к хосту **client**
+Подключаемся к хосту client
 
 ```bash
-**vagrant ssh client
+vagrant ssh client
 
-sudo -i**
+sudo -i
 ```
 
 Создаем сервис-файл для backup-а
 
 ```bash
-**tee <<EOF >/dev/null /etc/systemd/system/borg-backup.service
+tee <<EOF >/dev/null /etc/systemd/system/borg-backup.service
 [Unit]
 Description=Borg Backup
 
@@ -305,13 +305,13 @@ ExecStart="/bin/borg create --stats \${REPO}::{hostname}-{user}-{now:%Y-%m-%d_%H
 ExecStart="/bin/borg check \${REPO}"
 # Очистка старых бэкапов
 ExecStart="/bin/borg prune --keep-daily 90 --keep-monthly 12 --keep-yearly 1 \${REPO}"
-EOF**
+EOF
 ```
 
 Создаем borg-backup.timer, который будет запускать borg-backup.service каждые 5 минут
 
 ```bash
-**tee <<EOF >/dev/null /etc/systemd/system/borg-backup.timer
+tee <<EOF >/dev/null /etc/systemd/system/borg-backup.timer
 [Unit]
 Description=Borg Backup
 Requires=borg-backup.service
@@ -322,21 +322,21 @@ OnUnitActiveSec=5min
 
 [Install]
 WantedBy=timers.target
-EOF**
+EOF
 ```
 
 Включаем и запускаем службу таймера
 
 ```bash
-**systemctl enable borg-backup.timer 
+systemctl enable borg-backup.timer 
 
-systemctl start borg-backup.timer**
+systemctl start borg-backup.timer
 ```
 
 Проверяем работу таймера
 
 ```bash
-**systemctl list-timers --all**
+systemctl list-timers --all
 NEXT                         LEFT          LAST                         PASSED       UNIT                         ACTIVATES
 Mon 2024-02-26 08:40:26 UTC  2min 44s left Mon 2024-02-26 08:35:26 UTC  2min 15s ago borg-backup.timer            borg-backup.service
 Tue 2024-02-27 06:00:44 UTC  21h left      Mon 2024-02-26 06:00:44 UTC  2h 36min ago systemd-tmpfiles-clean.timer systemd-tmpfiles-clean.service
@@ -348,7 +348,7 @@ n/a                          n/a           n/a                          n/a     
 Проверяем что бэкапы создаются
 
 ```bash
-**borg list borg@192.168.11.160:/var/backup/client_data/**
+borg list borg@192.168.11.160:/var/backup/client_data/
 Enter passphrase for key ssh://borg@192.168.11.160/var/backup/client_data:
 etc-2024-02-26_06:41:43              Mon, 2024-02-26 06:41:52 [c8f9150238b808789f3eed188c8012ee29d8bbdb67ff88072d19405d3d788cf8]
 client-root-2024-02-26_08:24:03      Mon, 2024-02-26 08:24:20 [b9629ef69801a0efa9edcfd2837f8f2c0c8f643e8e30520a1e54ad13e1eae2d4]
