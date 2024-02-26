@@ -56,7 +56,7 @@ config.vm.synced_folder ".", "/vagrant", disabled: true
 
 Запускаем `vagrant up`. 
 
-[Log запуска хостов](https://www.notion.so/Log-12715c58bfe04085b839a4c9a01bf5ce?pvs=21)
+[Log запуска хостов](log.md)
 
 Подключаемся к хосту **ansible**, создаем ssh-key и прокидываем его на хосты.
 
@@ -64,7 +64,7 @@ config.vm.synced_folder ".", "/vagrant", disabled: true
 vagrant ssh ansible
 
 # Выполняем под пользователем vagrant
-**ssh-keygen**
+ssh-keygen
 Generating public/private rsa key pair.
 Enter file in which to save the key (/home/vagrant/.ssh/id_rsa): 
 Enter passphrase (empty for no passphrase): 
