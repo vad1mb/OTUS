@@ -5,7 +5,7 @@
 
   tasks:
 
-# Добавляем новый репозиторий взамен отключенного
+# Меняем репозиторий (взамен отключенного)
       - name: set up repo
         replace:
           path: "{{ item }}"
@@ -25,7 +25,7 @@
           - /etc/yum.repos.d/CentOS-Linux-AppStream.repo
           - /etc/yum.repos.d/CentOS-Linux-BaseOS.repo
 
-#Установка пакета httpd (дополнительно сразу ставятся все пакеты, которые потребуются в данном задании
+#Установка пакетов
       - name: install soft on CentOS
         yum:
           name: 
@@ -38,7 +38,15 @@
           state: present
           update_cache: true
 
-#Копируем кобраз CentOS-8.4.2105-x86_64-dvd1.iso с хоста ansible
+#Скачивание образа CentOS-8.4.2105-x86_64-dvd1.iso (в Vagrantfile подкладываем ранее выкачанный ISO)
+#Скачиваться будет долго, размер файла больше 9 ГБ.
+      # - name: Download ISO image CentOS 8.4.2105
+      #   get_url:
+      #     url: http://mirror.sale-dedic.com/centos/8.4.2105/isos/x86_64/CentOS-8.4.2105-x86_64-dvd1.iso
+      #     dest: ~/CentOS-8.4.2105-x86_64-dvd1.iso
+      #     mode: '0755'
+
+#Копируем образ CentOS-8.4.2105-x86_64-dvd1.iso с хоста ansible
       - name: set up httpd config
         template:
           src: /vagrant/CentOS-8.4.2105-x86_64-dvd1.iso
@@ -46,14 +54,6 @@
           owner: root
           group: root
           mode: 0640
-
-#Скачивание образа CentOS-8.4.2105-x86_64-dvd1.iso
-#Скачиваться будет долго, размер файла больше 9 ГБ.
-      # - name: Download ISO image CentOS 8.4.2105
-      #   get_url:
-      #     url: http://mirror.sale-dedic.com/centos/8.4.2105/isos/x86_64/CentOS-8.4.2105-x86_64-dvd1.iso
-      #     dest: ~/CentOS-8.4.2105-x86_64-dvd1.iso
-      #     mode: '0755'
 
 #Создание каталога /iso и назначение прав 755
 

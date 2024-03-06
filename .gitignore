@@ -114,3 +114,9 @@ dz18/.vagrant/machines/ansible/virtualbox/action_provision
 dz18/.vagrant/machines/ansible/virtualbox/box_meta
 dz18/.vagrant/machines/ansible/virtualbox/private_key
 dz18/.vagrant/machines/ansible/virtualbox/synced_folders
+.vagrant.d/boxes/bento-VAGRANTSLASH-ubuntu-22.04/202309.08.0/virtualbox/ubuntu-22.04-amd64-disk001.vmdk
+.vagrant.d/boxes/bento-VAGRANTSLASH-ubuntu-22.04/metadata_url
+.vagrant.d/boxes/bento-VAGRANTSLASH-ubuntu-22.04/202309.08.0/virtualbox/box_update_check
+.vagrant.d/boxes/bento-VAGRANTSLASH-ubuntu-22.04/202309.08.0/virtualbox/box.ovf
+.vagrant.d/boxes/bento-VAGRANTSLASH-ubuntu-22.04/202309.08.0/virtualbox/metadata.json
+.vagrant.d/boxes/bento-VAGRANTSLASH-ubuntu-22.04/202309.08.0/virtualbox/Vagrantfile
