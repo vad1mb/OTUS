@@ -62,7 +62,7 @@ ansible-playbook ./provision.yml -i ./hosts
 
 Проверяем, что данные загрузочного образа доступны по http
 
-![Untitled](%D0%94%D0%BE%D0%BC%D0%B0%D1%88%D0%BD%D0%B5%D0%B5%20%D0%B7%D0%B0%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5%2018%20PXE%208b92da3fc00e4db79dff18c02aff6a06/Untitled.png)
+![Untitled](pic/Untitled.png)
 
 ## Загрузка ВМ pxeclient по сети
 
@@ -74,18 +74,16 @@ vagrant up pxeclient
 
 Подключаемся к консоли ВМ. Видим, что появилось меню загрузки.
 
-![Untitled](%D0%94%D0%BE%D0%BC%D0%B0%D1%88%D0%BD%D0%B5%D0%B5%20%D0%B7%D0%B0%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5%2018%20PXE%208b92da3fc00e4db79dff18c02aff6a06/Untitled%201.png)
+![Untitled](pic/Untitled%201.png)
 
 При выборе соответствующего раздела происходит процесс инсталляции ОС.
 
 При выборе автоматической установки при настройке согласно методичке имеется какая-то проблема
 
-![Untitled](%D0%94%D0%BE%D0%BC%D0%B0%D1%88%D0%BD%D0%B5%D0%B5%20%D0%B7%D0%B0%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5%2018%20PXE%208b92da3fc00e4db79dff18c02aff6a06/Untitled%202.png)
+![Untitled](pic/Untitled%202.png)
 
 Разбираться с которой уже выше моих сил. Большая часть времени по домашним заданиям уходит на поиск решений напрямую не связанных с самим заданием и частично из-за того, что методички устарели и требуют актуализации.
 
-![Untitled](%D0%94%D0%BE%D0%BC%D0%B0%D1%88%D0%BD%D0%B5%D0%B5%20%D0%B7%D0%B0%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5%2018%20PXE%208b92da3fc00e4db79dff18c02aff6a06/Untitled%203.png)
+![Untitled](pic/Untitled%203.png)
 
 Видим, что ip-адрес получен из диапазона DHCP
-
-[Ошибки](https://www.notion.so/a5024b16306940f5a4e1a5522dd70b87?pvs=21)
