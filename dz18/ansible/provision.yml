@@ -47,13 +47,18 @@
       #     mode: '0755'
 
 #Копируем образ CentOS-8.4.2105-x86_64-dvd1.iso с хоста ansible
-      - name: set up httpd config
-        template:
-          src: /vagrant/CentOS-8.4.2105-x86_64-dvd1.iso
-          dest: ~
-          owner: root
-          group: root
-          mode: 0640
+      # - name: set up httpd config
+      #   template:
+      #     src: /home/vagrant/CentOS-8.4.2105-x86_64-dvd1.iso
+      #     dest: ~
+      #     owner: root
+      #     group: root
+      #     mode: 0640
+
+      - name: Synchronization of src on the control machine to dest on the remote hosts
+        ansible.posix.synchronize:
+          src: /home/vagrant/CentOS-8.4.2105-x86_64-dvd1.iso
+          dest: /root
 
 #Создание каталога /iso и назначение прав 755
 

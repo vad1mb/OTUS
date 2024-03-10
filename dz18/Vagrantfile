@@ -25,9 +25,9 @@ Vagrant.configure("2") do |config|
 	  end
 	
 	  # ENABLE to setup PXE
-	  server.vm.provision "shell",
-		name: "Setup PXE server",
-		path: "setup_pxe.sh"
+	  #server.vm.provision "shell",
+		#name: "Setup PXE server",
+		#path: "setup_pxe.sh"
 	end
 	
 	  ## PXE Client
@@ -38,7 +38,7 @@ Vagrant.configure("2") do |config|
 		pxeclient.vm.host_name = "pxeclient"
 		pxeclient.vm.network :private_network, ip: "10.0.0.21"
 		pxeclient.vm.provider :virtualbox do |vb|
-		  vb.memory = "2048"
+		  vb.memory = "1024"
 		  vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
 		  vb.customize [
 			  'modifyvm', :id,
@@ -56,34 +56,9 @@ Vagrant.configure("2") do |config|
 	#     end
 	end
 
-	## ANSIBLE on Centos 192.168.50.100
-	#   config.vm.define "ansible" do |ansible|
-	# 	ansible.vm.box = 'centos/7'
-	# 	ansible.vm.host_name = 'ansible'
-	# 	ansible.vm.network :private_network, 
-	# 						ip: "192.168.50.100", adapter: 2
-		
-	# 	ansible.vm.provider "virtualbox" do |vb|
-	# 	  vb.memory = "512"
-	# 	  vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
-		
-	# 	  # Cетевая папка - заработала при явном указании g:\\OTUS\\dz18\\
-	# 	ansible.vm.synced_folder "g:\\OTUS\\dz18\\", "/vagrant", disabled: false
-
-	# 	ansible.vm.provision "shell", run: "always", inline: <<-SHELL
-	# 	sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
-	# 	sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
-	# 	sudo dnf update libmodulemd -y &&
-	# 	sudo yum install python3 -y &&
-	# 	sudo yum install epel-release -y &&
-	# 	#sudo yum install --skip-broken ansible -y &&
-	# 	sudo yum install ansible -y &&
-	# 	sudo yum install nano -y
-	# 	SHELL
-	# 	end
 	#   end
 
-    ## Ansible (management) 192.168.50.100
+    ## Ansible (management) 10.0.0.250
 	# Отключаем сетевую папку (ошибка rsync)
     config.vm.synced_folder ".", "/vagrant", disabled: true
 
@@ -91,14 +66,15 @@ Vagrant.configure("2") do |config|
 		ansible.vm.box = "centos/7"
 		ansible.vm.box_version = "2004.01"
 		ansible.vm.network "private_network", ip: "10.0.0.250",
-							virtualbox__intnet: "net1"
+							virtualbox__intnet: "pxenet"
 		ansible.vm.hostname = "ansible"
 
 		ansible.vm.provider "virtualbox" do |vb|
 			vb.memory = "512"
 			vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
 		end
-	#	ansible.vm.synced_folder "g:\\OTUS\\dz18\\", "/vagrant", disabled: false			
+		## Когда срабатывает, когда - нет ¯\_(ツ)_/¯
+		#ansible.vm.synced_folder "g:\\OTUS\\dz18\\", "/vagrant", disabled: false			
 
 		ansible.vm.provision "shell", inline: <<-SHELL
 		sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config    

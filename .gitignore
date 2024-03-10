@@ -120,3 +120,9 @@ dz18/.vagrant/machines/ansible/virtualbox/synced_folders
 .vagrant.d/boxes/bento-VAGRANTSLASH-ubuntu-22.04/202309.08.0/virtualbox/box.ovf
 .vagrant.d/boxes/bento-VAGRANTSLASH-ubuntu-22.04/202309.08.0/virtualbox/metadata.json
 .vagrant.d/boxes/bento-VAGRANTSLASH-ubuntu-22.04/202309.08.0/virtualbox/Vagrantfile
+.vagrant.d/data/lock.machine-action-1b94e0995b5a83ee69878cdce14f484f.lock
+dz18/.vagrant/machines/pxeclient/virtualbox/action_set_name
+dz18/.vagrant/machines/pxeclient/virtualbox/creator_uid
+dz18/.vagrant/machines/pxeclient/virtualbox/id
+dz18/.vagrant/machines/pxeclient/virtualbox/index_uuid
+dz18/.vagrant/machines/pxeclient/virtualbox/vagrant_cwd
