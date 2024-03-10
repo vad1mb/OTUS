@@ -62,7 +62,7 @@ ansible-playbook ./provision.yml -i ./hosts
 
 Проверяем, что данные загрузочного образа доступны по http
 
-![Untitled](pic/Untitled.png)
+!(pic/Untitled.png)
 
 ## Загрузка ВМ pxeclient по сети
 
