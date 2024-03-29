@@ -1,0 +1,58 @@
+---
+- hosts: all
+  gather_facts: true
+  become: true
+
+  tasks:
+  # Отключаем firewall на inetRouter 
+  - name: Disable ufw 
+    service:
+      name: ufw
+      state: stopped
+      enabled: false
+    when: (ansible_hostname == "inetRouter")
+
+  # Настраиваем NAT на inetRouter
+  - name: Set up NAT 
+    template:
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}"
+      owner: root
+      group: root
+      mode: "{{ item.mode }}"
+    with_items:
+      - {src: "iptables_rules.ipv4", dest: "/etc/iptables_rules.ipv4", mode: "0644"}
+      - {src: "iptables_restore", dest: "/etc/network/if-pre-up.d/iptables", mode: "0755"}
+    when: (ansible_hostname == "inetRouter")
+
+  # Включить роутинг на хостах в группе routers
+  - name: set up forwarding packages across routers
+    sysctl:
+      name: net.ipv4.conf.all.forwarding
+      value: '1'
+      state: present
+    when: "'routers' in group_names"
+
+  # У всех хостов, кроме inetRouter отключить дефолт на NAT (eth0), который vagrant поднимает для связи
+  - name: disable default route
+    template: 
+      src: 00-installer-config.yaml
+      dest: /etc/netplan/00-installer-config.yaml
+      owner: root
+      group: root
+      mode: 0644
+    when: (ansible_hostname != "inetRouter")
+
+  # Прописываем таблицы маршрутизации на хостах
+  - name: add routes
+    template: 
+      src: "50-vagrant_{{ansible_hostname}}.yaml"
+      dest: /etc/netplan/50-vagrant.yaml
+      owner: root
+      group: root
+      mode: 0644
+  
+  # Рестартуем хосты после настройки
+#  - name: restart all hosts
+#    reboot:
+#      reboot_timeout: 600

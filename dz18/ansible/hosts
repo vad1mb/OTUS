@@ -1,0 +1,15 @@
+[all:vars]
+#ansible_ssh_user=vagrant
+#ansible_ssh_pass=vagrant
+
+[routers]
+#inetRouter ansible_host=192.168.50.10
+inetRouter    ansible_host=192.168.50.10 ansible_ssh_user=vagrant ansible_ssh_private_key_file=/vagrant/.vagrant/machines/inetRouter/virtualbox/private_key
+centralRouter ansible_host=192.168.50.11 
+office1Router ansible_host=192.168.50.20 
+office2Router ansible_host=192.168.50.30
+
+[servers]
+centralServer ansible_host=192.168.50.12
+office1Server ansible_host=192.168.50.21
+office2Server ansible_host=192.168.50.31
