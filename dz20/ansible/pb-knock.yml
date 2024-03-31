@@ -1,0 +1,28 @@
+---
+- hosts: inetRouter
+  gather_facts: true
+  become: true
+
+  tasks:
+# Копируем файл iptables c настройкой для Knock port на inetRouter 
+      - name: Set up iptables 
+        template:
+          src: "{{ item.src }}"
+          dest: "{{ item.dest }}"
+          owner: root
+          group: root
+          mode: "{{ item.mode }}"
+        with_items:
+          - {src: "inetRouter/iptables_rules.ipv4", dest: "/etc/iptables_rules.ipv4", mode: "0644"}
+          - {src: "inetRouter/iptables_restore", dest: "/etc/network/if-pre-up.d/iptables", mode: "0755"}
+
+      - name: Restart network
+        service:
+          name: networking
+          state: restarted
+                
+
+# Рестартуем хост после настройки
+#      - name: restart host inetRouter
+#        reboot:
+#          reboot_timeout: 300

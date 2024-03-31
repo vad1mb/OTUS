@@ -53,6 +53,6 @@
       mode: 0644
   
   # Рестартуем хосты после настройки
-#  - name: restart all hosts
-#    reboot:
-#      reboot_timeout: 600
+  - name: restart all hosts
+    reboot:
+      reboot_timeout: 600
