@@ -313,3 +313,13 @@ temp/.vagrant/machines/inetRouter2/virtualbox/private_key
 temp/.vagrant/machines/inetRouter2/virtualbox/synced_folders
 temp/.vagrant/machines/inetRouter2/virtualbox/vagrant_cwd
 temp/.vagrant/rgloader/loader.rb
+dz21/.vagrant/machines/router1/virtualbox/action_provision
+dz21/.vagrant/machines/router1/virtualbox/action_set_name
+dz21/.vagrant/machines/router1/virtualbox/box_meta
+dz21/.vagrant/machines/router1/virtualbox/creator_uid
+dz21/.vagrant/machines/router1/virtualbox/id
+dz21/.vagrant/machines/router1/virtualbox/index_uuid
+dz21/.vagrant/machines/router1/virtualbox/private_key
+dz21/.vagrant/machines/router1/virtualbox/synced_folders
+dz21/.vagrant/machines/router1/virtualbox/vagrant_cwd
+dz21/.vagrant/rgloader/loader.rb
