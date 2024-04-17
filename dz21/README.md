@@ -21,6 +21,30 @@
 
 </aside>
 
+### **Подготовка стенда**
+
+Склонировать репозиторий. Запустить подготовку стенда:
+
+```bash
+vagrant up
+```
+
+Получим виртуальные машины: router1, router2, router3 и ansible 
+
+Подключаемся к ansible
+
+
+```bash
+vagrant ssh ansible
+```
+
+Запускаем настроку ВМ
+
+```bash
+cd /vagrant/ansible
+vagrant@ansible:/vagrant/ansible$ ansible-playbook provision.yml -i hosts 
+```
+
 ### **Настройка OSPF и проверка работы**
 
 Для настойки OSPF запускаем play-book provision.yml c хоста управления - ansible
