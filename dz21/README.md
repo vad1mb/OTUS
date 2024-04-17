@@ -4,9 +4,9 @@
 
 1. Развернуть 3 виртуальные машины: router1, router2, router3
 
-![Схема](scheme.png)
-
 2. Объединить их разными vlan
+
+![Схема](scheme.png)
 
 - настроить OSPF между машинами на базе Quagga (frr);
 - изобразить ассиметричный роутинг;
@@ -38,7 +38,7 @@ vagrant up
 vagrant ssh ansible
 ```
 
-Запускаем настроку ВМ
+Запускаем настройку ВМ
 
 ```bash
 cd /vagrant/ansible
@@ -341,7 +341,7 @@ listening on eth1, link-type EN10MB (Ethernet), snapshot length 262144 bytes
 11:47:20.768819 IP router2 > ospf-all.mcast.net: OSPFv2, Hello, length 48
 ```
 
-только служебный трафик ospf.
+видим только служебный трафик ospf.
 
 На eth1 пинги ходить перестали так как на обоих роутерах на этих портах повышенная стоимость маршрута.
 
