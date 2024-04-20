@@ -1,0 +1,45 @@
+---
+- name: VPN
+  hosts: all
+  gather_facts: true
+  become: true
+
+  tasks:
+        # - name: Add host key to known_hosts
+        #   known_hosts:
+        #     name: "{{ inventory_hostname }}"
+        #     key: "ssh-rsa host_key_here"
+        #     path: "/home/vagrant/.ssh/known_hosts"
+        #     state: present
+
+        # - name: Set SSH parameters for password authentication
+        #   set_fact:
+        #     ansible_ssh_common_args: "-o PreferredAuthentications=password -o PubkeyAuthentication=no"
+
+        - name: install soft
+          apt:
+            name:
+                - nano
+                - traceroute
+                - iperf3
+            state: present
+            update_cache: true
+        
+        - name: install easyrsa
+          apt:
+            name:
+                - easy-rsa
+                - openvpn
+            state: present
+            update_cache: true 
+          when: (ansible_hostname == "server")   
+
+        # - name: Check SELinux status
+        #   become: yes
+        #   command: sestatus
+        #   register: selinux_status
+
+        # - name: Disable SELinux if it is enabled
+        #   become: yes
+        #   command: setenforce 0
+        #   when: "'disabled' not in selinux_status.stdout"

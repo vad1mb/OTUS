@@ -1,0 +1,71 @@
+MACHINES = {
+  :ansible => {
+    :box_name => "generic/ubuntu2204",
+    :vm_name => "ansible",
+    :net => [
+              {ip: '192.168.50.250', adapter: 5, netmask: "255.255.255.0", virtualbox__intnet: "ansible-net"},
+            ]
+},
+  :server => {
+        :box_name => "bento/ubuntu-22.04",
+        :vm_name => "server",
+        :net => [
+                  {ip: '192.168.50.10', adapter: 5, netmask: "255.255.255.0", virtualbox__intnet: "ansible-net"},
+                ]
+  },
+
+  :client => {
+        :box_name => "bento/ubuntu-22.04",
+        :vm_name => "client",
+        :net => [
+                  {ip: '192.168.50.11', adapter: 5, netmask: "255.255.255.0", virtualbox__intnet: "ansible-net"},
+                ]
+  }
+}
+
+Vagrant.configure("2") do |config|
+
+    MACHINES.each do |boxname, boxconfig|
+  
+      config.vm.define boxname do |box|
+  
+          box.vm.box = boxconfig[:box_name]
+          box.vm.host_name = boxname.to_s
+
+          box.vm.provider "virtualbox" do |v|
+            v.memory = 768
+          #  v.cpus = 1
+           end
+  
+          boxconfig[:net].each do |ipconf|
+            box.vm.network "private_network", ip: ipconf[:ip], adapter: ipconf[:adapter], netmask: ipconf[:netmask], virtualbox__intnet: ipconf[:virtualbox__intnet]
+          end
+                    
+          case boxname.to_s
+
+          when "server"
+            box.vm.provision "shell", run: "always", inline: <<-SHELL
+            sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config    
+                systemctl restart sshd.service
+              SHELL
+
+          when "client"
+            box.vm.provision "shell", run: "always", inline: <<-SHELL
+            sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config    
+            systemctl restart sshd.service
+              SHELL
+
+          when "ansible"
+            box.vm.synced_folder "g:\\OTUS\\dz22\\", "/vagrant", disabled: false
+            box.vm.provision "shell", run: "always", inline: <<-SHELL
+            sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config    
+                systemctl restart sshd.service
+            sudo apt-get update -y &&                            
+            sudo apt-get install python3 -y &&
+            sudo apt-get install ansible -y &&
+            sudo apt-get install sshpass -y
+              SHELL
+          end
+        end
+    end
+end 
