@@ -393,3 +393,15 @@ dz22/.vagrant/machines/server/virtualbox/synced_folders
 dz22/.vagrant/machines/server/virtualbox/vagrant_cwd
 dz22/.vagrant/rgloader/loader.rb
 .gitignore
+.vagrant.d/data/lock.machine-action-7c06e1f4785551f448daaffdeaae2057.lock
+.vagrant.d/data/lock.machine-action-1005ea3c82ec798ccb55ebe6d8904f0b.lock
+dz23/.vagrant/machines/ansible/virtualbox/action_provision
+dz23/.vagrant/machines/ansible/virtualbox/action_set_name
+dz23/.vagrant/machines/ansible/virtualbox/box_meta
+dz23/.vagrant/machines/ansible/virtualbox/creator_uid
+dz23/.vagrant/machines/ansible/virtualbox/id
+dz23/.vagrant/machines/ansible/virtualbox/index_uuid
+dz23/.vagrant/machines/ansible/virtualbox/private_key
+dz23/.vagrant/machines/ansible/virtualbox/synced_folders
+dz23/.vagrant/machines/ansible/virtualbox/vagrant_cwd
+dz23/.vagrant/rgloader/loader.rb
