@@ -444,3 +444,34 @@ dz24/.vagrant/machines/testServer2/virtualbox/private_key
 dz24/.vagrant/machines/testServer2/virtualbox/synced_folders
 dz24/.vagrant/machines/testServer2/virtualbox/vagrant_cwd
 dz24/.vagrant/rgloader/loader.rb
+.vagrant.d/boxes/generic-VAGRANTSLASH-centos8s/4.3.12/hyperv/info.json
+.vagrant.d/boxes/generic-VAGRANTSLASH-centos8s/4.3.12/hyperv/metadata.json
+.vagrant.d/boxes/generic-VAGRANTSLASH-centos8s/4.3.12/hyperv/Vagrantfile
+.vagrant.d/boxes/generic-VAGRANTSLASH-centos8s/4.3.12/hyperv/Virtual Hard Disks/generic-centos8s-hyperv-x64.vhdx
+.vagrant.d/boxes/generic-VAGRANTSLASH-centos8s/4.3.12/hyperv/Virtual Machines/563CFD91-B9EB-4915-8506-AFCACB2FF889.vmcx
+.vagrant.d/boxes/generic-VAGRANTSLASH-centos8s/4.3.12/hyperv/Virtual Machines/563CFD91-B9EB-4915-8506-AFCACB2FF889.vmgs
+.vagrant.d/boxes/generic-VAGRANTSLASH-centos8s/4.3.12/hyperv/Virtual Machines/563CFD91-B9EB-4915-8506-AFCACB2FF889.VMRS
+.vagrant.d/boxes/generic-VAGRANTSLASH-centos8s/4.3.12/hyperv/Virtual Machines/box.xml
+.vagrant.d/data/lock.machine-action-f6019a5d9232e9ba66f999c4c81f9790.lock
+.vagrant.d/data/machine-index/_index
+dz24/.vagrant/machines/inetRouter/hyperv/action_configure
+dz24/.vagrant/machines/inetRouter/hyperv/action_set_name
+dz24/.vagrant/machines/inetRouter/hyperv/box_meta
+dz24/.vagrant/machines/inetRouter/hyperv/creator_uid
+dz24/.vagrant/machines/inetRouter/hyperv/id
+dz24/.vagrant/machines/inetRouter/hyperv/index_uuid
+dz24/.vagrant/machines/inetRouter/hyperv/vagrant_cwd
+dz24/.vagrant/machines/inetRouter/hyperv/Virtual Hard Disks/generic-centos8s-hyperv-x64.vhdx
+dz24/.vagrant/machines/inetRouter/hyperv/Virtual Machines/C7A636BD-D314-4634-802D-A57AAA30A2C8.vmcx
+dz24/.vagrant/machines/inetRouter/hyperv/Virtual Machines/C7A636BD-D314-4634-802D-A57AAA30A2C8.vmgs
+dz24/.vagrant/machines/inetRouter/hyperv/Virtual Machines/C7A636BD-D314-4634-802D-A57AAA30A2C8.VMRS
+PROJECT/.vagrant/machines/db1/virtualbox/action_provision
+PROJECT/.vagrant/machines/db1/virtualbox/action_set_name
+PROJECT/.vagrant/machines/db1/virtualbox/box_meta
+PROJECT/.vagrant/machines/db1/virtualbox/creator_uid
+PROJECT/.vagrant/machines/db1/virtualbox/id
+PROJECT/.vagrant/machines/db1/virtualbox/index_uuid
+PROJECT/.vagrant/machines/db1/virtualbox/private_key
+PROJECT/.vagrant/machines/db1/virtualbox/synced_folders
+PROJECT/.vagrant/machines/db1/virtualbox/vagrant_cwd
+PROJECT/.vagrant/rgloader/loader.rb
