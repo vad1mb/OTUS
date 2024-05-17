@@ -475,3 +475,12 @@ PROJECT/.vagrant/machines/db1/virtualbox/private_key
 PROJECT/.vagrant/machines/db1/virtualbox/synced_folders
 PROJECT/.vagrant/machines/db1/virtualbox/vagrant_cwd
 PROJECT/.vagrant/rgloader/loader.rb
+PROJECT/.vagrant/machines/ansible/virtualbox/action_provision
+PROJECT/.vagrant/machines/ansible/virtualbox/action_set_name
+PROJECT/.vagrant/machines/ansible/virtualbox/box_meta
+PROJECT/.vagrant/machines/ansible/virtualbox/creator_uid
+PROJECT/.vagrant/machines/ansible/virtualbox/id
+PROJECT/.vagrant/machines/ansible/virtualbox/index_uuid
+PROJECT/.vagrant/machines/ansible/virtualbox/private_key
+PROJECT/.vagrant/machines/ansible/virtualbox/synced_folders
+PROJECT/.vagrant/machines/ansible/virtualbox/vagrant_cwd

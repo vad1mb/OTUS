@@ -1,0 +1,6 @@
+---
+  - name: db
+    hosts: db1
+    become: true
+    roles:
+      - role: db

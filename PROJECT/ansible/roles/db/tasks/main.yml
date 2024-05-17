@@ -1,0 +1,30 @@
+---
+# tasks file for roles/db
+
+    - name: Обновление списка пакетов
+      apt:
+        update_cache: yes
+
+    - name: Установка MySQL
+      apt:
+        name: mysql-server
+        state: present
+
+    - name: Запуск сервиса MySQL
+      service:
+        name: mysql
+        state: started
+        enabled: yes
+
+    - name: Создание базы данных и пользователя
+      mysql_db:
+        name: mydatabase
+        state: present
+      tags: debug
+
+    - name: Создание пользователя и предоставление прав
+      mysql_user:
+        name: myuser
+        password: mypassword
+        priv: 'mydatabase.*:ALL'
+        state: present

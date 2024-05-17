@@ -1,20 +1,19 @@
 # -*- mode: ruby -*-
 # vim: set ft=ruby :
 
+ssh_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICp8BnOIfrLFPv6T/jwucZUTu9XWHtdqYeZGKLgcT9Vu"
+
 MACHINES = {
+  :ansible => {
+    :box_name => "bento/ubuntu-22.04",
+    # :vm_name => "ansible",
+    :ip_addr => '192.168.10.250'
+},
   :db1 => {
         # :box_name => "ubuntu/jammy",
         :box_name => "bento/ubuntu-22.04",
         :ip_addr => '192.168.10.31'
   },
-#   :DBServer => {
-#         :box_name => "centos/7",
-#         :ip_addr => '192.168.10.11'
-#   },
-#   :MonSrv => {
-#         :box_name => "centos/7",
-#         :ip_addr => '192.168.10.12'
-#   }
 }
 
 Vagrant.configure("2") do |config|
@@ -22,13 +21,13 @@ Vagrant.configure("2") do |config|
   MACHINES.each do |boxname, boxconfig|
 
       config.vm.define boxname do |box|
-
+          
           box.vm.box = boxconfig[:box_name]
           box.vm.host_name = boxname.to_s
           config.vm.synced_folder ".", "/vagrant", disabled: true # Не пробрасывать каталог
           box.vm.network "private_network", ip: boxconfig[:ip_addr]
           box.vm.provider :virtualbox do |vb|
-            vb.customize ["modifyvm", :id, "--memory", "600"]
+            vb.customize ["modifyvm", :id, "--memory", "560"]
             # Подключаем дополнительные диски
             #vb.customize ['createhd', '--filename', second_disk, '--format', 'VDI', '--size', 5 * 1024]
             #vb.customize ['storageattach', :id, '--storagectl', 'IDE', '--port', 0, '--device', 1, '--type', 'hdd', '--medium', second_disk]
@@ -41,25 +40,39 @@ Vagrant.configure("2") do |config|
             # yum install wget -y
           SHELL
           
-        #   case boxname.to_s
-        #   when "AppSrv"
-        #     box.vm.provision "ansible" do |ansible|
-        #       ansible.verbose = "vv"
-        #       ansible.become = "true"
-        #       ansible.playbook = "provision/role_nginx.yml"
-        #       ansible.compatibility_mode = "1.8"
-        #       # ansible.playbook = "provision/role_php.yml"
-        #     end
-        #   when "DBServer"
-        #     box.vm.provision "ansible" do |ansible|
-        #       ansible.verbose = "vv"
-        #       ansible.become = "true"
-        #       # ansible.limit = "1"
-        #       ansible.playbook = "provision/dbs_main.yml"
-        #       ansible.compatibility_mode = "1.8"
-        #       # ansible.playbook = "provision/dbs_create_wpdb.yml"
-        #     end
-        #   end
-      end
-  end
+          case boxname.to_s
+            when "ansible"
+              box.vm.synced_folder "d:\\OTUS\\PROJECT\\ansible\\", "/ansible", disabled: false
+              box.vm.provision "shell", inline: <<-SHELL
+              sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config    
+              systemctl restart sshd.service
+              sudo apt-get update -y &&                            
+              sudo apt-get install python3 -y &&
+              sudo apt-get install ansible -y &&
+              sudo apt-get install sshpass -y &&
+              sudo apt-get install python3-pip -y &&
+              pip install PyMySQL
+                SHELL
+
+            when "db1"
+              box.vm.provision "shell", inline: <<-SHELL
+              sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config    
+              systemctl restart sshd.service
+              useradd -m -s /bin/bash ans
+              mkdir -p /home/ans/.ssh
+              chmod 700 /home/ans/.ssh
+              touch /home/ans/.ssh/authorized_keys
+              chmod 600 /home/ans/.ssh/authorized_keys
+              echo "#{ssh_key}" > /home/ans/.ssh/authorized_keys
+              chown -R ans:ans /home/ans/.ssh
+              # Добавление пользователя ans в группу sudoers
+              usermod -aG sudo ans
+              # Настройка sudoers для пользователя ans
+              echo "ans ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/ans
+              sudo apt-get install python3-pip -y &&
+              pip install PyMySQL
+                SHELL
+          end
+      end  
+    end
 end
