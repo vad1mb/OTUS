@@ -2,5 +2,8 @@
   - name: db
     hosts: db1
     become: true
+    vars:
+      mysql_root_password: password
     roles:
       - role: db
+    
