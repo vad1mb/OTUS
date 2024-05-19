@@ -1,2 +1,8 @@
 ---
 # vars file for roles/db
+
+# Переменные для базы данных
+db_name: my_database
+db_user: my_user
+db_password: my_password
+mysql_root_password: 1234567890

@@ -1,0 +1,78 @@
+- name: Update apt's repositories
+  apt:
+    update_cache: yes
+    upgrade: no
+    autoremove: yes
+
+- name: Install required packages
+  apt:
+     name:
+       - unzip
+       - apache2
+       - python3-pip
+       - libapache2-mod-php
+       - php-gd
+       - php-mysql
+       - php-curl
+       - php-mbstring
+       - php-intl
+       - php-gmp
+       - php-bcmath
+       - php-xml
+       - php-imagick
+       - php-zip
+     state: present 
+
+- name: Download nextcloud release
+  get_url:
+     url: "{{ nextcloud_url }}"
+     dest: "~"
+     force:  "{{ force_new_download | default ('false') }}"
+  register: archive_path
+
+- name: Check archive type
+  set_fact:
+    archive_type: "{{ 'zip' if nextcloud_url.endswith('.zip') else 'tar' }}"
+
+- name: Unarchive ZIP file
+  ansible.builtin.unarchive:
+    src: "{{ archive_path.dest }}"
+    dest: "/var/www/"
+    remote_src: true
+  when: archive_type == 'zip'
+
+- name: Unarchive TAR file
+  ansible.builtin.unarchive:
+    src: "{{ archive_path.dest }}"
+    dest: "/var/www/"
+    remote_src: true
+  when: archive_type == 'tar'
+
+- name: Change ownership of Nextcloud directory
+  ansible.builtin.file:
+    path: "/var/www/nextcloud"
+    owner: www-data
+    group: www-data
+    recurse: yes
+
+### apache configuration
+- name: Create Apache configuration file
+  template:
+    src: templates/nextcloud.conf
+    dest: /etc/apache2/sites-available/000-default.conf
+
+- name: Enable Apache modules
+  community.general.apache2_module: 
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - rewrite
+    - headers
+    - env
+    - dir
+    - mime
+
+- name: Restart Apache
+  service:
+    name: apache2
+    state: restarted

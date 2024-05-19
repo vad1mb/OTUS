@@ -1,0 +1,21 @@
+- hosts: db1
+  become: yes
+  vars:
+    mysql_root_password: "11111111"
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install MySQL server
+      apt:
+        name: mysql-server
+        state: present
+
+    - name: Set MySQL root password
+      shell: mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '{{ mysql_root_password }}';"
+
+    - name: Restart MySQL service
+      service:
+        name: mysql
+        state: restarted

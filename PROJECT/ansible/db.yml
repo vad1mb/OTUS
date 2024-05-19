@@ -2,6 +2,7 @@
   - name: db
     hosts: db1
     become: true
+    gather_facts: no
     vars:
       mysql_root_password: password
     roles:

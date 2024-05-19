@@ -8,6 +8,11 @@
     - name: Установка MySQL
       apt:
         name: mysql-server
+        state: present        
+
+    - name: Установка MySQL
+      apt:
+        name: mysql-server
         state: present
 
     - name: Запуск сервиса MySQL
@@ -16,30 +21,29 @@
         state: started
         enabled: yes
 
-    - name: update mysql root password for all root accounts
-      mysql_user:
-        name: root
-        host: "{{ item }}"
-        password: "{{ mysql_root_password }}"
+    - name: Set MySQL root password
+      shell: mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '{{ mysql_root_password }}';"
+      tags:
+        - debug
+
+    - name: create a new database
+      mysql_db:
+        name: testdb
+        state: present
         login_user: root
         login_password: "{{ mysql_root_password }}"
-        priv: "*.*:ALL,GRANT"
-      with_items:
-        - "{{ ansible_fqdn }}"
-        - 127.0.0.1
-        - ::1
-        - localhost
+        login_host: localhost
+        login_port: 3306
 
+    # - name: add sample data to database
+    #   copy:
+    #     src: dump.sql
+    #     dest: /tmp/dump.sql
 
-    - name: Создание базы данных и пользователя
-      mysql_db:
-        name: mydatabase
-        state: present
-      tags: debug
-
-    - name: Создание пользователя и предоставление прав
-      mysql_user:
-        name: myuser
-        password: mypassword
-        priv: 'mydatabase.*:ALL'
-        state: present
+    # - name: insert sample data into database
+    #   mysql_db:
+    #     name: testdb
+    #     state: import
+    #     target: /tmp/dump.sql
+    #     login_user: root
+    #     login_password: "{{ mysql_root_password }}"

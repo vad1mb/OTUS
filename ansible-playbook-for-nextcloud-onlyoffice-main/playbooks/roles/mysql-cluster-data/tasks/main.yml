@@ -1,0 +1,53 @@
+- name: Update apt's repositories
+  apt:
+    update_cache: yes
+    upgrade: yes
+    autoremove: yes
+
+- name: Install packages
+  apt:
+    name:
+      - libaio1
+      - python3-pip
+      - mariadb-server
+    state: present
+
+- name: Make sure mysql module is installed
+  pip:
+    name: pymysql
+
+  # mysql_secure_installation
+- name: Delete anonymous MySQL user
+  mysql_user: 
+    login_unix_socket: /var/run/mysqld/mysqld.sock 
+    name: "" 
+    host: "{{ item }}"
+    state: absent
+  with_items:
+    - localhost
+    - "{{ansible_nodename}}"
+
+  # mysql_secure_installation
+- name: Delete Hostname based MySQL user
+  mysql_user: 
+    login_unix_socket: /var/run/mysqld/mysqld.sock 
+    name: root 
+    host: "{{ansible_nodename}}" 
+    state: absent
+
+  # mysql_secure_installation
+- name: Remove MySQL test database
+  mysql_db: 
+    login_unix_socket: /var/run/mysqld/mysqld.sock 
+    name: test 
+    state: absent
+
+- name: Copy config
+  template:
+    src: 50-server.conf
+    dest: /etc/mysql/mariadb.conf.d/50-server.cnf
+
+- name: Initialize mariadb
+  service:
+    name: mariadb
+    state: restarted
