@@ -1,8 +1,11 @@
-[all:vars]
-ansible_ssh_user=ans
+[db_main]
+db1 ansible_host=192.168.10.31
 
-# ansible_ssh_pass=vagrant
 
-[vm]
-db1 ansible_host=192.168.10.31 
-app1 ansible_host=192.168.10.11 
+# ansible_user=ans
+# [all]
+# db1 ansible_host=192.168.10.31 
+# app1 ansible_host=192.168.10.11 
+
+# [all:children]
+# db_main

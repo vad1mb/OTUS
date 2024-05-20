@@ -1,0 +1,5 @@
+  - name: Update apt's repositories
+    apt:
+      update_cache: yes
+      upgrade: no
+      autoremove: yes

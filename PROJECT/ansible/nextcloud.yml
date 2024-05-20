@@ -1,0 +1,15 @@
+- hosts: all
+  gather_facts: true
+  become: true
+  vars_files:
+    - ./vars.yml
+  roles:
+    - provision
+
+- hosts: db_main
+  gather_facts: true
+  become: true
+  vars_files:
+    - ./vars.yml
+  roles:
+     - { role: mysql_main, tags: mysql_main_tag }
