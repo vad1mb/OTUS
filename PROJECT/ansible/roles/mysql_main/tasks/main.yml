@@ -18,31 +18,28 @@
     host: "{{ansible_nodename}}" 
     state: absent
 
-  # mysql_secure_installation
-- name: Remove MySQL test database
-  mysql_db: login_unix_socket=/var/run/mysqld/mysqld.sock name=test state=absent
+- name: Create MySQL User for DEBUG
+  community.mysql.mysql_user:
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    name: "debug"
+    host: "%"
+    password: "debug"
+    state: present
 
-# - name: Выполнение SQL-запроса для удаления записей c пользователем nextcloud ####### 🔆
-#   community.mysql.mysql_query:
-#         login_unix_socket: /var/run/mysqld/mysqld.sock
-#         login_user: root
-#         login_host: localhost
-#         query: "DELETE FROM mysql.user WHERE User='nextcloud';"  
-#   tags:
-#      - xxx
+- name: Grant Privileges for DEBUG MySQL User
+  community.mysql.mysql_user:
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    name: "debug"
+    host: "%"
+    priv: '*.*:ALL'
+    state: present    
 
-# - name: Reload privilege tables
-#   command: 'mysql -ne "{{ item }}"'
-#   with_items:
-#     - FLUSH PRIVILEGES
-#   changed_when: False      
-
-- name: Create MySQL User for NextCloud  ### ❌❌❌
+- name: Create MySQL User for Nextcloud
   community.mysql.mysql_user:
     login_unix_socket: /var/run/mysqld/mysqld.sock
     name: "{{ mysql_nextcloud_user }}"
     host: localhost
-    password: "{{ mysql_nextcloud_password }}"
+    password: "{{ mysql_nextcloud_pass }}"
     state: present
 
 - name: Create Nextcloud Database
@@ -53,20 +50,14 @@
     collation: utf8mb4_general_ci
     encoding: utf8mb4  
 
-- name: Grant Privileges to MySQL User on Nextcloud Database
-  community.mysql.mysql_user:
-    login_unix_socket: /var/run/mysqld/mysqld.sock
-    #login_user: root
-    name: "{{ mysql_nextcloud_user }}"
-    #password: "{{ mysql_nextcloud_password }}"
-  #  host: "{{ item }}"
-    host: "192.168.10.21"
-    priv: 'nextcloud.*:ALL'
-    state: present
-  # with_items:
-  #       - "192.168.10.21"
-  #       - "192.168.10.22"
-      
+# - name: Grant Privileges to MySQL User on Nextcloud Database
+#   community.mysql.mysql_user:
+#     login_unix_socket: /var/run/mysqld/mysqld.sock
+#     name: "{{ mysql_nextcloud_user }}"
+#     #host: "{{ app_ip }}"
+#     host: "['192.168.10.21', '192.168.10.22']"
+#     priv: 'nextcloud.*:ALL'
+#     state: present
 
 - name: Reload privilege tables
   command: 'mysql -ne "{{ item }}"'
@@ -74,14 +65,10 @@
     - FLUSH PRIVILEGES
   changed_when: False        
   
-
 - name: Copy config
   template:
-    src: 50-server.conf
-    dest: /etc/mysql/mariadb.conf.d/50-server.cnf
-
-# - name: Run new galera cluster
-#   command: galera_new_cluster
+    src: 50-server.cnf
+    dest: /etc/mysql/mariadb.conf.d/50-server.cnf 
 
 - name: Initialize mariadb
   service:

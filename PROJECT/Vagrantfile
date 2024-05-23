@@ -28,7 +28,7 @@ Vagrant.configure("2") do |config|
       config.vm.define boxname do |box|
           box.vm.box = boxconfig[:box_name]
           box.vm.host_name = boxname.to_s
-          config.vm.synced_folder ".", "/vagrant", disabled: true # Не пробрасывать каталог
+          config.vm.synced_folder ".", "/vagrant", disabled: false # Не пробрасывать каталог
           box.vm.network "private_network", ip: boxconfig[:ip_addr]
           box.vm.provider :virtualbox do |vb|
             vb.customize ["modifyvm", :id, "--memory", "560"]
@@ -62,12 +62,12 @@ Vagrant.configure("2") do |config|
               sudo apt-get install python3 ansible -y
                 SHELL
 
-            when "db1"
-              box.vm.provision "shell", inline: <<-SHELL
-              # Установка модуля Ansible для MySQL
-              #sudo apt-get update -y
-              #sudo apt-get install python3-pip -y && pip install PyMySQL
-                SHELL
+            # when "db1"
+            #   box.vm.provision "shell", inline: <<-SHELL
+            #   # Установка модуля Ansible для MySQL
+            #   #sudo apt-get update -y
+            #   #sudo apt-get install python3-pip -y && pip install PyMySQL
+            #     SHELL
           end
       end  
   end

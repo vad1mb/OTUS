@@ -2,7 +2,16 @@
 # vars file for roles/db
 
 # Переменные для базы данных
-db_name: my_database
-db_user: my_user
-db_password: my_password
-mysql_root_password: 1234567890
+
+mysql_nextcloud_user: ncuser
+mysql_nextcloud_pass: ncuser
+app_ip: 192.168.10.2%
+# app_ip: 
+#   - "192.168.10.21"
+#   - "192.168.10.22"
+
+
+# db_name: my_database
+# db_user: my_user
+# db_password: my_password
+# mysql_root_password: 1234567890
