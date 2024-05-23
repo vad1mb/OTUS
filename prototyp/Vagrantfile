@@ -1,25 +1,10 @@
 # -*- mode: ruby -*-
 # vim: set ft=ruby :
 
-ssh_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE6DjTuZGIABfSBXc23bBBmRdBKd56QzHqqn5u2kwdUE"
-ansible_user = "ans"
-
 MACHINES = {
-  :ansible => {
+  :nc => {
     :box_name => "bento/ubuntu-22.04",
-    :ip_addr => '192.168.10.250'
-  },
-  :app1 => {
-    :box_name => "bento/ubuntu-22.04",
-    :ip_addr => '192.168.10.21'
-  },
-  :db1 => {
-    :box_name => "bento/ubuntu-22.04",
-    :ip_addr => '192.168.10.31'
-  },
-  :db2 => {
-    :box_name => "bento/ubuntu-22.04",
-    :ip_addr => '192.168.10.32'
+    :ip_addr => '192.168.10.100'
   },  
 }
 
