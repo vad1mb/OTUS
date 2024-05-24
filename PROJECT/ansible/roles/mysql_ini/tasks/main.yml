@@ -1,0 +1,90 @@
+- name: Install packages
+  apt:
+    name:
+      - libaio1
+      - python3-pip
+      - mariadb-server
+    state: present
+
+- name: Make sure mysql module is installed
+  pip:
+    name: pymysql
+
+- name: Change MySQL bind address
+  replace:
+    path: /etc/mysql/mariadb.conf.d/50-server.cnf
+    regexp: 'bind-address\s*=\s*127.0.0.1'
+    replace: 'bind-address = 0.0.0.0'
+
+- name: Delete Hostname based MySQL user
+  community.mysql.mysql_user: 
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    name: root 
+    host: "{{ansible_nodename}}" 
+    state: absent
+
+- name: Create MySQL User for DEBUG
+  community.mysql.mysql_user:
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    user: debug
+    host: "%"
+    password: 'debug'
+    priv: '*.*:ALL'
+    state: present
+
+# - name: Grant Privileges for DEBUG MySQL User
+#   community.mysql.mysql_user:
+#     login_unix_socket: /var/run/mysqld/mysqld.sock
+#     name: "debug"
+#     host: "%"
+#     priv: '*.*:ALL'
+#     state: present    
+
+- name: Create MySQL User for replica (только на мастере)
+  become: yes
+  #become_user: mysql
+  community.mysql.mysql_user:
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    user: "{{ repl_user }}"
+    host: "{{ mysql_slave_host }}"
+    password: "{{ repl_user_pass }}"
+    priv: '*.*:REPLICATION SLAVE'
+    state: present
+  run_once: true
+  delegate_to: db1
+  tags: xxx
+  
+- name: Reload privilege tables
+  command: 'mysql -ne "{{ item }}"'
+  with_items:
+    - FLUSH PRIVILEGES
+  changed_when: False    
+
+- name: Replace MySQL configuration file on MASTER
+  template:
+    src: 50-server-master.cnf.j2
+    dest: /etc/mysql/mariadb.conf.d/50-server.cnf
+  delegate_to: db1
+  tags: xxx
+
+- name: Replace MySQL configuration file on SLAVE
+  template:
+    src: 50-server-slave.cnf.j2
+    dest: /etc/mysql/mariadb.conf.d/50-server.cnf
+  delegate_to: db2
+  tags: xxx
+
+- name: Запуск репликации на подчиненном сервере (только на реплике)
+  become: yes
+  #become_user: mysql
+  community.mysql.mysql_replication:
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    mode: startreplica
+  run_once: true
+  delegate_to: db2
+
+  
+- name: Initialize mariadb
+  service:
+    name: mariadb
+    state: restarted

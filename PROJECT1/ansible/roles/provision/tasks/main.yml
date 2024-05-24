@@ -1,0 +1,22 @@
+# This role contains common plays that will run on all nodes.
+
+- name: Update apt's repositories
+  apt:
+    update_cache: yes
+    upgrade: 'no'
+    autoremove: yes
+
+# - name: Allow local network
+#   ufw:
+#     rule: allow
+#     proto: tcp
+#     from: "{{ network }}"
+#     to: any
+#     port: any
+#     comment: "Allow local network access"
+#   notify: reload firewalld   # handlers
+
+- name: Make hosts
+  ansible.builtin.template:
+    src: hosts.j2
+    dest: /etc/hosts

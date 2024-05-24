@@ -1,3 +1,4 @@
+# Первичная инициализация хостов, установка пакетов
 - hosts: all
   gather_facts: true
   become: true
@@ -6,10 +7,19 @@
   roles:
     - provision
 
-- hosts: db_main
+# Стнадартное разворачивание MySQL на db-хостах
+- hosts: db
   gather_facts: true
   become: true
   vars_files:
     - ./vars.yml
   roles:
-     - { role: mysql_main, tags: mysql_main_tag }
+     - { role: mysql_ini, tags: mysql_ini_tag }
+
+# - hosts: db_main
+#   gather_facts: true
+#   become: true
+#   vars_files:
+#     - ./vars.yml
+#   roles:
+#      - { role: mysql_main, tags: mysql_main_tag }

@@ -1,0 +1,24 @@
+---
+## This playbook deploys the whole application stack in this site.
+
+# Apply common configuration to all hosts
+- hosts: all
+  become: true
+  vars_files:
+    - ./vars.yml
+  roles:
+    - provision
+  #- monitoring-node
+
+# Configure and deploy MAIN database servers.
+- hosts: db_main
+  become: true
+  vars_files:
+    - ./vars.yml
+  roles:
+    - provision-db
+  # - master-db
+  # - web-db
+
+  tags:
+  - db

@@ -1,0 +1,16 @@
+[db_main]
+db1 ansible_host=192.168.10.31 server_id=1
+
+[db_slave]
+db2 ansible_host=192.168.10.32 server_id=2
+
+[webservers]
+#app1 ansible_host=192.168.10.21
+#app2 ansible_host=192.168.10.22
+
+[front]
+#front ansible_host=192.168.10.11
+
+[db:children]
+db_main
+db_slave

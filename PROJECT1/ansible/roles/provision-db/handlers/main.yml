@@ -1,0 +1,8 @@
+---
+# Handler to handle DB tier notifications
+
+- name: flush priveleges
+  command: 'mysql -ne "{{ item }}"'
+  with_items:
+    - FLUSH PRIVILEGES
+  changed_when: False   

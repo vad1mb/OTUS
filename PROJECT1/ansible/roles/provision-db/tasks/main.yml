@@ -1,0 +1,82 @@
+---
+# This role will install MySQL and create db user and give permissions.
+- name: Install MariaDB packages
+  apt:
+    name:
+      - libaio1
+      - python3-pip
+      - mariadb-server
+    state: present
+
+- name: Make sure mysql module is installed
+  pip:
+    name: pymysql
+
+- name: Change MySQL bind address
+  replace:
+    path: /etc/mysql/mariadb.conf.d/50-server.cnf
+    regexp: 'bind-address\s*=\s*127.0.0.1'
+    replace: 'bind-address = 0.0.0.0'
+
+- name: Start MariaDB Service
+  service: 
+    name: mariadb
+    state: started 
+    enabled: yes
+
+- name: Delete Hostname based MySQL user
+  community.mysql.mysql_user: 
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    name: root 
+    host: "{{ansible_nodename}}" 
+    state: absent
+  notify:
+  - flush priveleges
+
+- name: Create MySQL User for DEBUG
+  community.mysql.mysql_user:
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    user: debug
+    host: "%"
+    password: 'debug'
+    priv: '*.*:ALL'
+    state: present
+  notify:
+  - flush priveleges
+
+- name: Initialize mariadb
+  service:
+    name: mariadb
+    state: restarted  
+
+# - name: Remove test database from MariaDB
+#   mysql_db:
+#     name: test
+#     state: absent
+
+# - name: Remove anonymous users from MariaDB
+#   mysql_user:
+#     name: ''
+#     state: absent
+#     host_all: true
+
+# - name: Remove remote root login from MariaDB
+#   community.mysql.mysql_query:
+#     query:
+#       - DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1')
+
+# - name: Create Slave DB User
+#   mysql_user:
+#     name: '{{ mysql_slave_user }}'
+#     password: '{{ mysql_slave_password }}'
+#     priv: '*.*:REPLICATION SLAVE'
+#     host: '%' 
+#     state: present
+#   when: "'dbservers' in group_names"
+
+# - name: Create database user with name 'backup'
+#   community.mysql.mysql_user:
+#     name: '{{ mysql_backup_user }}'
+#     password: '{{ mysql_backup_password }}'
+#     priv: '*.*:SELECT,SHOW VIEW,LOCK TABLES,RELOAD,REPLICATION CLIENT,PROCESS'
+#     state: present
