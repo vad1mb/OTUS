@@ -16,6 +16,12 @@
      - php-zip
     state: present
 
+- name: Ensure directory exists
+  ansible.builtin.file:
+    path: "{{ nc_data_files }}"
+    state: directory
+    mode: '0755'    
+
 # Распаковка файловой части Nextcloud
 - name: Unpack the archive into the destination directory
   ansible.builtin.unarchive:
