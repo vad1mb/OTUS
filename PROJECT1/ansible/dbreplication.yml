@@ -1,0 +1,67 @@
+- name: Configure MariaDB Master-Slave Replication
+  hosts: db
+  become: yes
+  vars_files:
+    - ./vars.yml
+
+  tasks:
+    - name: Configure Master server
+      when: inventory_hostname in groups['db_main']
+      block:
+        - name: Ensure MariaDB is installed
+          ansible.builtin.package:
+            name: mariadb-server
+            state: present
+
+        - name: Get Master log file and position
+          ansible.builtin.shell: |
+            mysql -u root -e "SHOW MASTER STATUS;" | awk 'NR==2 {print $1, $2}'
+          register: master_status
+          changed_when: false
+
+    - name: Configure Slave server
+      when: inventory_hostname in groups['db_slave']
+      block:
+        - name: Ensure MariaDB is installed
+          ansible.builtin.package:
+            name: mariadb-server
+            state: present
+
+        - name: Configure server ID
+          ansible.builtin.lineinfile:
+            path: /etc/mysql/mariadb.conf.d/50-server.cnf
+            regexp: '^#?{{ item.option }}'
+            line: '{{ item.option }} = {{ item.value }}'
+            state: present
+          loop:
+            - { option: 'server_id', value: '{{ server_id }}' }
+            - { option: 'report_host', value: 'slave' }
+
+        - name: Restart MariaDB service
+          ansible.builtin.service:
+            name: mariadb
+            state: restarted
+
+        - name: Stop Slave replication
+          community.mysql.mysql_replication:
+            login_unix_socket: /var/run/mysqld/mysqld.sock
+            mode: "stopslave"            
+
+        - name: Configure Slave to use Master
+          community.mysql.mysql_replication:
+            mode: "changemaster"
+            master_host: '{{ master_host }}'
+            master_user: '{{ dbuser_replicator }}'
+            master_password: '{{ dbuser_replicator_pass }}'
+            master_log_file: "{{ hostvars[groups['db_main'][0]].master_status.stdout.split(' ')[0] }}"
+            master_log_pos: "{{ hostvars[groups['db_main'][0]].master_status.stdout.split(' ')[1] }}"
+            # login_user: '{{ db_admin }}'
+            # login_password: '{{ db_admin_pass }}'
+            login_unix_socket: /var/run/mysqld/mysqld.sock
+          vars:
+            ansible_verbosity: 2
+
+        - name: Start Slave replication
+          community.mysql.mysql_replication:
+            login_unix_socket: /var/run/mysqld/mysqld.sock
+            mode: "startslave"

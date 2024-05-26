@@ -1,0 +1,38 @@
+
+
+- name: Create MySQL User for Nextcloud
+  community.mysql.mysql_user:
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    user: "{{ mysql_nextcloud_user }}"
+    password: "{{ mysql_nextcloud_user_pass }}"
+    host: "{{ item }}"
+    priv: 'nextcloud.*:ALL'
+    state: present
+  loop: "{{ db_nc_access_hosts }}"
+  notify:
+  - flush priveleges
+
+- name: Create Nextcloud Database
+  community.mysql.mysql_db:
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    name: "{{ nc_database }}"
+    state: present
+    collation: utf8mb4_general_ci
+    encoding: utf8mb4  
+  
+# - name: Check if Nextcloud Database exists
+#   community.mysql.mysql_db:
+#     login_unix_socket: /var/run/mysqld/mysqld.sock
+#     name: "{{ nc_database }}"
+#     state: present
+#   register: nc_db_check
+#   tags: debug
+
+- name: Import MySQL dump nextcloud
+  community.mysql.mysql_db:
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    db: "{{ nc_database }}"
+    state: import
+    target: "{{ mysql_dump_file }}"
+  # when: nc_db_check.results | selectattr('name', 'equalto', nc_database) | length == 0
+  tags: debug

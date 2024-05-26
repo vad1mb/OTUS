@@ -7,5 +7,7 @@
 #::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
 
 {% for item in groups.all %}
+{% if hostvars[item]['ansible_all_ipv4_addresses'] is defined %}
 {{ hostvars[item].ansible_all_ipv4_addresses | ansible.netcommon.ipaddr(network) | first }} {{ hostvars[item].ansible_hostname }}
+{% endif %}
 {% endfor %}

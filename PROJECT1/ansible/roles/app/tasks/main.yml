@@ -1,0 +1,45 @@
+# Установка Apache и необходимых пакетов
+- name: Install sofware packages for APP 
+  apt:
+    name:
+     - apache2 
+     - libapache2-mod-php 
+     - php-gd 
+     - php-mysql 
+     - php-curl 
+     - php-mbstring 
+     - php-intl 
+     - php-gmp 
+     - php-bcmath 
+     - php-xml 
+     - php-imagick 
+     - php-zip
+    state: present
+
+# Распаковка файловой части Nextcloud
+- name: Unpack the archive into the destination directory
+  ansible.builtin.unarchive:
+    src: "{{ remote_archive_path }}"
+    dest: "{{ nc_data_files }}"
+    # extra_opts:
+    #   - '--exclude=*.txt' # Пример исключения всех .txt файлов, подходит для tar, по умолчанию ничего исключать не нужно
+    # remote_src: true
+
+# Настройка конфигурации
+- name: Copy Nextcloud config for Apache
+  template:
+    src: apache_nextcloud.conf.j2
+    dest: /etc/apache2/sites-available/nextcloud.conf
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Enable Nextcloud site
+  command: 
+    cmd: a2ensite nextcloud.conf
+  notify:  
+    - Reload Apache
+
+
+
+# Рестарт web-сервера

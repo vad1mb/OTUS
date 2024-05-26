@@ -530,3 +530,4 @@ PROJECT1/.vagrant/machines/db2/virtualbox/private_key
 PROJECT1/.vagrant/machines/db2/virtualbox/synced_folders
 PROJECT1/.vagrant/machines/db2/virtualbox/vagrant_cwd
 PROJECT1/.vagrant/rgloader/loader.rb
+PROJECT1/ansible/nextcloud_files.bz2
