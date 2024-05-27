@@ -10,6 +10,8 @@
   roles:
     - provision
   #- monitoring-node
+  tags:
+  - provision
 
 # Base configure database servers.
 - hosts: db
@@ -29,10 +31,10 @@
   roles:
     - replicate-db
   tags:
-  - replicate
+  - replicate-db
 
 # Database NEXTCLOUD
-- hosts: db_main
+- hosts: db-main
   become: true
   vars_files:
     - ./vars.yml

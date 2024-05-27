@@ -1,7 +1,7 @@
 # -*- mode: ruby -*-
 # vim: set ft=ruby :
 
-ssh_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJXKTiDIBlh1yuLbmMI1YIS8sjip9OI4qxlBlAg4dgdt vagrant@ansible"
+ssh_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOvcTcrFTzhPvVAh9rjhQPH41UIFojMnZxYSD8tvJDer vagrant@ansible"
 ansible_user = "ans"
 
 MACHINES = {
@@ -45,6 +45,7 @@ MACHINES = {
 Vagrant.configure("2") do |config|
   MACHINES.each do |boxname, boxconfig|
       config.vm.define boxname do |box|
+          box.vm.box_check_update = false  # Отключение проверки обновлений
           box.vm.box = boxconfig[:box_name]
           box.vm.hostname = boxname.to_s
           config.vm.synced_folder ".", "/vagrant", disabled: false # пробрасывать каталог
@@ -71,6 +72,12 @@ Vagrant.configure("2") do |config|
             echo "#{ansible_user} ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/"#{ansible_user}"
             SHELL
           
+          # box.vm.synced_folder "d:\\nextcloud.inst\\", "/data/nextcloud",
+          #   owner: "www-data", group: "www-data",
+          #   mount_options: ["dmode=770", "fmode=770"],
+          #   disabled: false,
+          #   when: ["app1", "app2"]
+
           case boxname.to_s
             when "ansible"
               box.vm.synced_folder "d:\\OTUS\\PROJECT1\\ansible\\", "/ansible", 
@@ -85,11 +92,16 @@ Vagrant.configure("2") do |config|
               sudo apt-get install python3 ansible -y
                 SHELL
             
-            when "app1"
+            when "app1" 
               box.vm.synced_folder "d:\\nextcloud.inst\\", "/data/nextcloud", 
                 owner: "www-data", group: "www-data", 
-                mount_options: ["dmode=755", "fmode=644"],
-                disabled: false    
+                mount_options: ["dmode=770", "fmode=770"],
+                disabled: false   
+            when "app2" 
+              box.vm.synced_folder "d:\\nextcloud.inst\\", "/data/nextcloud", 
+                owner: "www-data", group: "www-data", 
+                mount_options: ["dmode=770", "fmode=770"],
+                disabled: false   
           end
       end  
   end
