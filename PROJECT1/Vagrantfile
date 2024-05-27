@@ -1,7 +1,7 @@
 # -*- mode: ruby -*-
 # vim: set ft=ruby :
 
-ssh_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBhWi1k96TgOWWfhpgxHcQHgRigGstjsJ0pcUJt7J7sK"
+ssh_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJXKTiDIBlh1yuLbmMI1YIS8sjip9OI4qxlBlAg4dgdt vagrant@ansible"
 ansible_user = "ans"
 
 MACHINES = {
@@ -73,7 +73,10 @@ Vagrant.configure("2") do |config|
           
           case boxname.to_s
             when "ansible"
-              box.vm.synced_folder "d:\\OTUS\\PROJECT1\\ansible\\", "/ansible", disabled: false
+              box.vm.synced_folder "d:\\OTUS\\PROJECT1\\ansible\\", "/ansible", 
+                owner: "vagrant", group: "vagrant", 
+                mount_options: ["dmode=755", "fmode=644"],
+                disabled: false
               box.vm.provision "shell", inline: <<-SHELL
               sudo cp /ansible/key/id_ed25519 /home/vagrant/.ssh/ && 
               sudo chown vagrant:vagrant /home/vagrant/.ssh/id_ed25519 && 
@@ -81,6 +84,12 @@ Vagrant.configure("2") do |config|
               sudo apt-get update -y &&                            
               sudo apt-get install python3 ansible -y
                 SHELL
+            
+            when "app1"
+              box.vm.synced_folder "d:\\nextcloud.inst\\", "/data/nextcloud", 
+                owner: "www-data", group: "www-data", 
+                mount_options: ["dmode=755", "fmode=644"],
+                disabled: false    
           end
       end  
   end

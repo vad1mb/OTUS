@@ -50,3 +50,13 @@
     - app
   tags:
   - app
+
+# Cofigure Front
+- hosts: front
+  become: true
+  vars_files:
+    - ./vars.yml
+  roles:
+    - front
+  tags:
+  - front

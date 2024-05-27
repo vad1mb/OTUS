@@ -49,8 +49,14 @@
       loop:
         - { option: 'server_id', value: '{{ server_id }}' }
         - { option: 'report_host', value: 'slave' }
-      notify:
-      - Restart MariaDB Service   
+      # notify:
+      # - Restart MariaDB Service   
+
+    - name: Restart MariaDB Service
+      service:
+        name: mariadb
+        state: restarted
+        enabled: yes
 
     - name: Stop Slave replication
       community.mysql.mysql_replication:

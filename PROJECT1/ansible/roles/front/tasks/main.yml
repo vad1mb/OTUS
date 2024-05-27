@@ -1,0 +1,18 @@
+- name: Установить Nginx
+  apt:
+    name: nginx
+    state: present
+
+- name: Загрузить конфигурацию Nginx
+  template:
+    src: nginx.conf.j2
+    dest: '{{ front_nginx_config_file }}'
+
+
+- name: Create symbolic link in sites-enabled
+  file:
+    src: '{{ front_nginx_config_file }}'
+    dest: /etc/nginx/sites-enabled/{{ nc_url}}
+    state: link
+  notify:
+    - restart nginx    

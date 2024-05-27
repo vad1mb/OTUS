@@ -7,6 +7,12 @@ ansible_ssh_private_key_file: /home/vagrant/.ssh/id_ed25519
 # Подавление запроса fingeprint
 ansible_ssh_extra_args: '-o StrictHostKeyChecking=no'
 
+## Front
+nc_url: nc.local
+front_nginx_config_file: /etc/nginx/sites-available/nc.local
+ssl_certificate: /vagrant/ansible/key/certificate.crt
+ssl_certificate_key: /vagrant/ansible/key/privatekey.key
+
 ## App
 remote_archive_path: /vagrant/ansible/nextcloud_files.bz2
 nc_data_files: /data/
