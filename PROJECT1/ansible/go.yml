@@ -21,7 +21,7 @@
   roles:
     - provision-db
   tags:
-  - db
+  - provision-db
 
 # Configure replication DB Master-Slave  
 - hosts: db

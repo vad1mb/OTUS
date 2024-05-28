@@ -1,29 +1,42 @@
-worker_processes 1;
+#worker_processes 1;
 
-events {
-    worker_connections 1024;
-}
+#events {
+#    worker_connections 1024;
+#}
 
-http {
+#http {
     upstream backend {
         {% for node in db_nc_access_hosts %}
-        server {{ node }}:80;
+        server {{ node }}.local:80;
         {% endfor %}
     }
 
-    server {
-        listen 443 ssl;
-        server_name {{ nc_url }};
-
-        ssl_certificate {{ ssl_certificate}};
-        ssl_certificate_key {{ ssl_certificate_key }};
-
+server {
+        listen 80;
+        server_name nc.local;
         location / {
-            proxy_pass http://backend;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto https;
+                include proxy_params;
+                proxy_pass http://backend;
+                proxy_redirect off;
+                proxy_http_version 1.1;
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection "upgrade";
         }
-    }
-}
+}        
+
+#    server {
+#        listen 443 ssl;
+#        server_name {{ nc_url }};
+
+#        ssl_certificate {{ ssl_certificate}};
+#       ssl_certificate_key {{ ssl_certificate_key }};
+
+#        location / {
+#            proxy_pass http://backend;
+#            proxy_set_header Host $host;
+#            proxy_set_header X-Real-IP $remote_addr;
+#            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#            proxy_set_header X-Forwarded-Proto https;
+#        }
+#    }
+#}
