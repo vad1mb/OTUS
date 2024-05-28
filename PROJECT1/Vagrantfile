@@ -1,6 +1,9 @@
 # -*- mode: ruby -*-
 # vim: set ft=ruby :
 
+# work
+#ssh_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOvcTcrFTzhPvVAh9rjhQPH41UIFojMnZxYSD8tvJDer vagrant@ansible"
+# home
 ssh_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOvcTcrFTzhPvVAh9rjhQPH41UIFojMnZxYSD8tvJDer vagrant@ansible"
 ansible_user = "ans"
 
