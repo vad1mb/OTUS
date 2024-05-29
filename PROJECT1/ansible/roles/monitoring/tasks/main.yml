@@ -1,3 +1,5 @@
+### Loki
+
 - name: Check if the archive file exists
   ansible.builtin.stat:
     path: "/opt/loki-linux-amd64.zip"
@@ -35,4 +37,29 @@
     state: started
     daemon_reload: true
     enabled: true 
+  become: true
+
+## Grafana
+
+- name: Install musl
+  apt:
+    name: musl 
+  become: true
+
+# - name: Copy grafana deb package from local
+#   template:
+#     src: grafana-enterprise_11.0.0_amd64.deb
+#     dest: /opt
+
+- name: Install Grafana
+  apt:
+    deb: /vagrant/grafana-enterprise_11.0.0_amd64.deb
+  become: true
+
+- name: Make sure a grafana-server is running
+  systemd:
+    name: grafana-server
+    state: started
+    daemon_reload: true
+    enabled: true  
   become: true
