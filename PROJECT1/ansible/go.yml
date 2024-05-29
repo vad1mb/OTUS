@@ -62,3 +62,13 @@
     - front
   tags:
   - front
+
+# Cofigure Monitor (Loki+Grafana)
+- hosts: mon
+  become: true
+  vars_files:
+    - ./vars.yml
+  roles:
+    - monitoring
+  tags:
+  - monitoring

@@ -6,6 +6,13 @@
     upgrade: 'no'
     autoremove: yes
 
+- name: Install base sofware packages
+  apt:
+    name:
+     - nano 
+     - unzip 
+    state: present
+    
 # - name: Allow local network
 #   ufw:
 #     rule: allow
