@@ -11,7 +11,7 @@ ansible_ssh_extra_args: '-o StrictHostKeyChecking=no'
 nc_url: nc.local
 front_nginx_config_file: /etc/nginx/sites-available/nc.local
 ssl_certificate: /vagrant/ansible/key/certificate.crt
-ssl_certificate_key: /vagrant/ansible/key/privatekey.key
+ssl_certificate_key: /vagrant/ansible/key/private.key
 
 ## App
 remote_archive_path: /vagrant/ansible/nextcloud_files.bz2
@@ -22,8 +22,8 @@ nc_database: nextcloud
 mysql_nextcloud_user: ncuser
 mysql_nextcloud_user_pass: ncuser
 db_nc_access_hosts:
-  - 192.168.10.21
-  - 192.168.10.22
+  - app1.local
+  - app2.local
 
 mysql_dump_file: /vagrant/ansible/nextcloud.sql
 

@@ -9,7 +9,7 @@
     - ./vars.yml
   roles:
     - provision
-  #- monitoring-node
+    - monitoring-node
   tags:
   - provision
 
