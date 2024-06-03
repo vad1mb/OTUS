@@ -24,14 +24,14 @@
   - provision-db
 
 # Configure replication DB Master-Slave  
-- hosts: db
-  become: true
-  vars_files:
-    - ./vars.yml
-  roles:
-    - replicate-db
-  tags:
-  - replicate-db
+# - hosts: db
+#   become: true
+#   vars_files:
+#     - ./vars.yml
+#   roles:
+#     - replicate-db
+#   tags:
+#   - replicate-db
 
 # Database NEXTCLOUD
 - hosts: db_main
