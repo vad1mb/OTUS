@@ -22,7 +22,7 @@
 - name: Copy loki config
   template:
     src: loki-local-config
-    dest: /opt
+    dest: /opt/loki-local-config.yaml
   become: true
 
 - name: Copy loki.service (unit for systemd) to /etc/systemd/system folder

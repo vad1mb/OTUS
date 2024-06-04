@@ -1,0 +1,10 @@
+[Unit]
+Description=Promtail
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/promtail-linux-amd64 --config.file=/opt/promtail-config.yml
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
