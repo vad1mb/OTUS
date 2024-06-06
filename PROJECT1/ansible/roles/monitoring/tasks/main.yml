@@ -23,13 +23,13 @@
   template:
     src: loki-local-config
     dest: /opt/loki-local-config.yaml
-  become: true
+
 
 - name: Copy loki.service (unit for systemd) to /etc/systemd/system folder
   template:
     src: loki.service
     dest: /etc/systemd/system
-  become: true
+
 
 - name: Load loki unit and start it
   systemd:
@@ -37,14 +37,13 @@
     state: started
     daemon_reload: true
     enabled: true 
-  become: true
+
 
 ## Grafana
 
 - name: Install musl
   apt:
     name: musl 
-  become: true
 
 # - name: Copy grafana deb package from local
 #   template:
@@ -54,12 +53,23 @@
 - name: Install Grafana
   apt:
     deb: /vagrant/grafana-enterprise_11.0.0_amd64.deb
-  become: true
 
-- name: Make sure a grafana-server is running
-  systemd:
-    name: grafana-server
-    state: started
-    daemon_reload: true
-    enabled: true  
-  become: true
+- name: Extract grafana.db 
+  ansible.builtin.unarchive:
+    src: '{{ grafanadb }}'
+    dest: /var/lib/grafana/
+    extra_opts: ["-o"]  # Optional: overwrite existing files
+    mode: '0640'  # Optional: set mode of extracted files
+    owner: grafana
+    group: grafana
+    remote_src: yes
+  notify: service grafana restart
+
+
+
+# - name: Make sure a grafana-server is running
+#   systemd:
+#     name: grafana-server
+#     state: started
+#     daemon_reload: true
+#     enabled: true  

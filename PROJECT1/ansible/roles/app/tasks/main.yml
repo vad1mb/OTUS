@@ -46,6 +46,3 @@
   notify:  
     - Reload Apache
 
-
-
-# Рестарт web-сервера

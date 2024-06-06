@@ -1,11 +1,12 @@
-# become: true
-# gather_facts: true
-
 ansible_ssh_user: ans
 ansible_ssh_private_key_file: /home/vagrant/.ssh/id_ed25519
 
 # Подавление запроса fingeprint
 ansible_ssh_extra_args: '-o StrictHostKeyChecking=no'
+
+## Monitoring
+promtail_download_url: https://github.com/grafana/loki/releases/download/v3.0.0/promtail-linux-amd64.zip
+grafanadb: /vagrant/ansible/grafana.db.zip
 
 ## Front
 nc_url: nc.local
@@ -42,7 +43,4 @@ replication_host:
   - 192.168.10.32
 
 
-# Monitoring
-promtail_download_url: "https://github.com/grafana/loki/releases/download/v3.0.0/promtail-linux-amd64.zip"
-promtail_install_dir: "/usr/local/bin"
-promtail_binary_name: "promtail-linux-amd64"
+

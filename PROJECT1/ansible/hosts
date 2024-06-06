@@ -1,3 +1,7 @@
+[db:children]
+db_main
+db_slave
+
 [db_main]
 db1 ansible_host=192.168.10.31 server_id=1
 
@@ -14,6 +18,3 @@ app0 ansible_host=192.168.10.11
 [monitor]
 mon ansible_host=192.168.10.40
 
-[db:children]
-db_main
-db_slave

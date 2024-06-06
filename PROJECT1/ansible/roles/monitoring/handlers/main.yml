@@ -1,0 +1,2 @@
+- name: service grafana restart
+  service: name=grafana-server state=restarted
