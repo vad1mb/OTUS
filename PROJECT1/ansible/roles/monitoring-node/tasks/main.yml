@@ -16,19 +16,21 @@
     mode: '0555'            # Optional: set mode of extracted files
     remote_src: yes
 
-- name: Copy promtail configuration
-  template:
-    src: promtail-config.yml
-    dest: /opt/promtail-config.yml
-
 - name: Copy promtail.service (unit for systemd)
   template:
     src: promtail.service
     dest: /etc/systemd/system
+  notify: service promtail restart
 
-- name: Load promtail unit and start it
-  systemd:
-    name: promtail
-    state: started
-    daemon_reload: true
-    enabled: true 
+- name: Copy promtail configuration
+  template:
+    src: promtail-config.yml
+    dest: /opt/promtail-config.yml
+  notify: service promtail restart
+
+# - name: Load promtail unit and start it
+#   systemd:
+#     name: promtail
+#     state: started
+#     daemon_reload: true
+#     enabled: true 

@@ -30,16 +30,8 @@
       notify:
       - Restart MariaDB Service      
 
-    # - name: Get Master log file and position
-    #   ansible.builtin.shell:
-    #     mysql -u root -e "SHOW MASTER STATUS;" | awk 'NR==2 {print $1, $2}'
-    #   register: master_status
-    #   changed_when: false
-
-    # - name: Debug variables !!!
-    #   debug:
-    #     var: 
-    #       - master_status
+    - name: Resart dbserver-master
+      command: systemctl restart mariadb
 
     - name: Reset master binlog
       command: /usr/bin/mysql -u root -e "RESET MASTER"
