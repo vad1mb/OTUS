@@ -3,10 +3,10 @@ db_main
 db_slave
 
 [db_main]
-db1 ansible_host=192.168.10.31 server_id=1
+db1 ansible_host=192.168.10.31 db_server_id=1
 
 [db_slave]
-db2 ansible_host=192.168.10.32 server_id=2
+db2 ansible_host=192.168.10.32 db_server_id=2
 
 [app]
 app1 ansible_host=192.168.10.21

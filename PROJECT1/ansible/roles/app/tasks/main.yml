@@ -39,8 +39,45 @@
     owner: root
     group: root
     mode: '0644'
+  notify:  
+    - Reload Apache
 
-- name: Enable Nextcloud site
+- name: Copy Nextcloud config.php
+  template:
+    src: config.php.j2
+    dest: /opt/nextcloud_config.php
+    owner: www-data
+    group: www-data
+    mode: '0770'
+  notify:  
+    - Reload Apache    
+
+- name: Create a symbolic link to a file config.php 
+  file:
+    src: /opt/nextcloud_config.php
+    dest: "{{ nc_data_files }}/nextcloud/config/config.php"
+    state: link     
+
+# Включение необходимых модулей
+- name: Enable Apache rewrite module
+  command: a2enmod rewrite
+
+- name: Enable Apache headers module
+  command: a2enmod headers
+
+- name: Enable Apache env module
+  command: a2enmod env
+
+- name: Enable Apache dir module
+  command: a2enmod dir
+
+- name: Enable Apache mime module
+  command: a2enmod mime    
+
+ 
+
+# Activate config Nextcloud
+- name: Enable Nextcloud site config
   command: 
     cmd: a2ensite nextcloud.conf
   notify:  

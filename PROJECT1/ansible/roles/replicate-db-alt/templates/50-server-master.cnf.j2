@@ -123,7 +123,8 @@ log_bin_index                   = /var/log/mysql/mariadb-bin.index.log
 relay_log                       = /var/log/mysql/relay.log
 relay_log_index                 = /var/log/mysql/relay.index.log
 
-# replicate-do-db = replica_db
+replicate-do-db = {{ nc_database }}
+
 replicate-ignore-db             = information_schema
 replicate-ignore-db             = mysql
 replicate-ignore-db             = performance_schema

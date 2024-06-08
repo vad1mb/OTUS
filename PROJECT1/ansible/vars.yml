@@ -6,7 +6,7 @@ ansible_ssh_extra_args: '-o StrictHostKeyChecking=no'
 
 ## Monitoring
 promtail_download_url: https://github.com/grafana/loki/releases/download/v3.0.0/promtail-linux-amd64.zip
-grafanadb: /vagrant/ansible/grafana.db.zip
+grafanadb: /vagrant/ansible/files/grafana.db.zip
 
 ## Front
 nc_url: nc.local
@@ -15,19 +15,20 @@ ssl_certificate: /vagrant/ansible/key/certificate.crt
 ssl_certificate_key: /vagrant/ansible/key/private.key
 
 ## App
-remote_archive_path: /vagrant/ansible/nextcloud_files.bz2
-nc_data_files: /data/
+# remote_archive_path: /vagrant/ansible/nextcloud_files.bz2
+nc_data_files: /data
 
 ## Databases
 nc_database: nextcloud
 mysql_nextcloud_user: ncuser
 mysql_nextcloud_user_pass: ncuser
-db_nc_access_hosts:
+db_nc_access_hosts:                   
   - app1.local
   - app2.local
 
-mysql_dump_file: /vagrant/ansible/nextcloud.sql
+mysql_dump_file: /vagrant/ansible/files/nextcloud.sql
 
+# For debug
 db_admin: root
 db_admin_pass: root
 db_admin_access_hosts:
@@ -36,10 +37,11 @@ db_admin_access_hosts:
   - 192.168.10.1    # Main host (for debug)
 
 # Replication db
+db_debug: true                        # Debug true|false
 dbuser_replicator: replicator
 dbuser_replicator_pass: replicator
-master_host: 192.168.10.31
-replication_host:
+master_host: 192.168.10.31            # Master !
+replication_host:                     # Slave
   - 192.168.10.32
 
 

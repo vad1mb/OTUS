@@ -1,9 +1,9 @@
-- name: Установить Nginx
+- name: Install Nginx
   apt:
     name: nginx
     state: present
 
-- name: Загрузить конфигурацию Nginx
+- name: Load Nginx config
   template:
     src: nginx.conf.j2
     dest: '{{ front_nginx_config_file }}'
