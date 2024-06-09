@@ -40,9 +40,10 @@ db_admin_access_hosts:
 db_debug: true                        # Debug true|false
 dbuser_replicator: replicator
 dbuser_replicator_pass: replicator
-master_host: 192.168.10.31            # Master !
-replication_host:                     # Slave
+master_host: 192.168.10.31            # Master: только один!
+replication_host:                     # Slave: может быть несколько
   - 192.168.10.32
+  - 192.168.10.33
 
 
 

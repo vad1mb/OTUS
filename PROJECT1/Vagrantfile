@@ -38,6 +38,11 @@ MACHINES = {
     :ip_addr => '192.168.10.32',
     :ssh_port => 2032
   },  
+  :db3 => {
+    :box_name => "bento/ubuntu-22.04",
+    :ip_addr => '192.168.10.33',
+    :ssh_port => 2033
+  },  
   :mon => {
     :box_name => "bento/ubuntu-22.04",
     :ip_addr => '192.168.10.40',

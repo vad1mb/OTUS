@@ -40,8 +40,8 @@
   notify:
   - flush priveleges
 
-- name: Initialize mariadb
-  service:
-    name: mariadb
-    state: restarted
+# - name: Initialize mariadb
+#   service:
+#     name: mariadb
+#     state: restarted
 

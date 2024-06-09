@@ -65,9 +65,9 @@
   register: db_master_status_new
 
 
-- debug:
-    msg: "{{ db_server_id }} - {{ db_master_status_new.master_status }}"
-  when: db_debug|default(False) == True
+# - debug:
+#     msg: "{{ db_server_id }} - {{ db_master_status_new.master_status }}"
+#   when: db_debug|default(False) == True
 
 
 - name: "(Master) Reset binlog"
@@ -82,9 +82,9 @@
   register: db_slave_status
 
 
-- debug:
-    var: db_slave_status
-  when: db_debug|default(False) == True
+# - debug:
+#     var: db_slave_status
+#   when: db_debug|default(False) == True
 
 
 - name: "(Slave) Setup replication"
@@ -93,9 +93,9 @@
   when: db_server_id != 1 and db_slave_status.Slave_IO_Running|default("No") == "No"
   notify: 'Restart MariaDB Service'
 
-- debug:
-    msg: "master_host= {{ master_host }}"
-  when: db_debug|default(False) == True
+# - debug:
+#     msg: "master_host= {{ master_host }}"
+#   when: db_debug|default(False) == True
 
 - name: "(Slave) Start slave"
   community.mysql.mysql_replication:
