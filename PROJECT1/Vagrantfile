@@ -38,15 +38,15 @@ MACHINES = {
     :ip_addr => '192.168.10.32',
     :ssh_port => 2032
   },  
-  :db3 => {
-    :box_name => "bento/ubuntu-22.04",
-    :ip_addr => '192.168.10.33',
-    :ssh_port => 2033
-  },  
   :mon => {
     :box_name => "bento/ubuntu-22.04",
     :ip_addr => '192.168.10.40',
     :ssh_port => 2040
+  },  
+  :xxx => {   ### Болванчик
+    :box_name => "bento/ubuntu-22.04",
+    :ip_addr => '192.168.10.50',
+    :ssh_port => 2050
   },  
 }
 
@@ -110,6 +110,11 @@ Vagrant.configure("2") do |config|
                 owner: "www-data", group: "www-data", 
                 mount_options: ["dmode=770", "fmode=770"],
                 disabled: false   
+              when "xxx"  # Болванчик
+                box.vm.synced_folder "d:\\nextcloud.files\\", "/data/nextcloud", 
+                  owner: "www-data", group: "www-data", 
+                  mount_options: ["dmode=770", "fmode=770"],
+                  disabled: false   
           end
       end  
   end

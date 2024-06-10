@@ -16,7 +16,7 @@
      - php-zip
     state: present
 
-- name: Ensure directory exists
+- name: Ensure directory exists {{ nc_data_files }}
   ansible.builtin.file:
     path: "{{ nc_data_files }}"
     state: directory
@@ -52,11 +52,19 @@
   notify:  
     - Reload Apache
 
-- name: Create a symbolic link to a file config.php (разные для разных APP)
-  file:
+# - name: Create a symbolic link to a file config.php (разные для разных APP)
+#   file:
+#     src: /opt/nextcloud_config.php
+#     dest: "{{ nc_data_files }}/nextcloud/config/config.php"
+#     state: link
+# #    remote_src: true
+#   when: not file_info.stat.exists  
+
+- name: Copy config.php file to the desired location
+  ansible.builtin.copy:
     src: /opt/nextcloud_config.php
-    dest: "{{ nc_data_files }}/nextcloud/config/config.php"
-    state: link     
+    dest: /data/nextcloud/config/config.php
+    remote_src: true
 
 # Включение необходимых модулей
 - name: Enable Apache modules

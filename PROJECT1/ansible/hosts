@@ -1,3 +1,6 @@
+[none]
+xxx ansible_host=192.168.10.50   db_server_id=100 # Болванчик
+
 [db:children]
 db_main
 db_slave
@@ -7,11 +10,13 @@ db1 ansible_host=192.168.10.31 db_server_id=1
 
 [db_slave]
 db2 ansible_host=192.168.10.32 db_server_id=2
-db3 ansible_host=192.168.10.33 db_server_id=3
+#db3 ansible_host=192.168.10.33 db_server_id=3
 
 [app]
-app1 ansible_host=192.168.10.21
+#app1 ansible_host=192.168.10.21
 app2 ansible_host=192.168.10.22
+#app3 ansible_host=192.168.10.23
+xxx ansible_host=192.168.10.50
 
 [front]
 app0 ansible_host=192.168.10.11

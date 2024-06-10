@@ -1,11 +1,8 @@
 <VirtualHost *:80>
-  DocumentRoot /data/nextcloud/
+  DocumentRoot {{nc_data_files}}/nextcloud
   ServerName nc.local
-  #ServerName  {{ inventory_hostname }}.local
-  #ServerName  {{ ansible_default_ipv4.address }}
-  #ServerName {{ ansible_ssh_host }}
 
-  <Directory /data/nextcloud/>
+  <Directory {{nc_data_files}}/nextcloud>
     Require all granted
     AllowOverride All
     Options FollowSymLinks MultiViews
