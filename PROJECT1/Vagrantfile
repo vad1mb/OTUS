@@ -79,42 +79,13 @@ Vagrant.configure("2") do |config|
             usermod -aG sudo "#{ansible_user}"
             echo "#{ansible_user} ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/"#{ansible_user}"
             SHELL
-          
-          # box.vm.synced_folder "d:\\nextcloud.inst\\", "/data/nextcloud",
-          #   owner: "www-data", group: "www-data",
-          #   mount_options: ["dmode=770", "fmode=770"],
-          #   disabled: false,
-          #   when: ["app1", "app2"]
 
           case boxname.to_s
-            when "ansible"
-              box.vm.synced_folder "d:\\OTUS\\PROJECT1\\ansible\\", "/ansible", 
-                owner: "vagrant", group: "vagrant", 
-                mount_options: ["dmode=755", "fmode=644"],
-                disabled: false
-              box.vm.provision "shell", inline: <<-SHELL
-              sudo cp /ansible/key/id_ed25519 /home/vagrant/.ssh/ && 
-              sudo chown vagrant:vagrant /home/vagrant/.ssh/id_ed25519 && 
-              sudo chmod 600 /home/vagrant/.ssh/id_ed25519 
-              sudo apt-get update -y &&                            
-              sudo apt-get install python3 ansible -y
-                SHELL
-            
-            when "app1" 
-              box.vm.synced_folder "d:\\nextcloud.files\\", "/data/nextcloud", 
-                owner: "www-data", group: "www-data", 
-                mount_options: ["dmode=770", "fmode=770"],
-                disabled: false   
-            when "app2" 
-              box.vm.synced_folder "d:\\nextcloud.files\\", "/data/nextcloud", 
-                owner: "www-data", group: "www-data", 
-                mount_options: ["dmode=770", "fmode=770"],
-                disabled: false   
-              when "xxx"  # Болванчик
-                box.vm.synced_folder "d:\\nextcloud.files\\", "/data/nextcloud", 
-                  owner: "www-data", group: "www-data", 
-                  mount_options: ["dmode=770", "fmode=770"],
-                  disabled: false   
+          when "app1", "app2", "xxx"  # Проброс каталога для WEB
+            box.vm.synced_folder "d:\\nextcloud.files\\", "/data/nextcloud", 
+              owner: "www-data", group: "www-data", 
+              mount_options: ["dmode=770", "fmode=770"],
+              disabled: false
           end
       end  
   end

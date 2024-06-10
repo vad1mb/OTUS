@@ -65,6 +65,7 @@
     src: /opt/nextcloud_config.php
     dest: /data/nextcloud/config/config.php
     remote_src: true
+  run_once: true        # выполнить только один раз
 
 # Включение необходимых модулей
 - name: Enable Apache modules

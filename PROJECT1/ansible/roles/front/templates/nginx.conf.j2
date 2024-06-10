@@ -6,10 +6,20 @@
 
 #http {
     upstream backend {
-        {% for node in db_nc_access_hosts %}
+    {% for node in db_nc_access_hosts %}
+        {% if loop.first %}
         server {{ node }}:80;
-        {% endfor %}
+        {% else %}
+        server {{ node }}:80 backup;
+        {% endif %}
+    {% endfor %}
+        keepalive 32;
    }
+
+     proxy_connect_timeout   5s;
+     proxy_send_timeout      60s;
+     proxy_read_timeout      60s;
+
 
 server {
         listen 80;

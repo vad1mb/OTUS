@@ -63,7 +63,7 @@
     owner: grafana
     group: grafana
     remote_src: yes
-  #notify: service grafana restart
+  notify: service grafana restart
 
 
 
