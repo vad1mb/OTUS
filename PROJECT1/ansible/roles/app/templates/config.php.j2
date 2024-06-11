@@ -5,7 +5,8 @@ $CONFIG = array (
   'secret' => 'LII4XHIYC82ZhAKFmj5xCOL0BACIsq3yHKf+Hzr8DCKttKpp',
   'trusted_domains' => 
   array (
-    0 => 'nc.local',
+    0 => '*',
+    1 => 'nc.local',
   ),
   'datadirectory' => '{{ nc_data_files }}/nextcloud/data',
   'dbtype' => 'mysql',
@@ -19,4 +20,8 @@ $CONFIG = array (
   'dbuser' => '{{ mysql_nextcloud_user }}',
   'dbpassword' => '{{ mysql_nextcloud_user_pass }}',
   'installed' => true,
+  'log_type' => 'file',
+  'logfile' => 'nextcloud.log',
+  'loglevel' => 3,
+  'logdateformat' => 'F d, Y H:i:s',
 );

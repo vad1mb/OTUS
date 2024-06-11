@@ -1,0 +1,153 @@
+- name: Configure MariaDB Master-Slave Replication
+  hosts: db
+  become: yes
+  vars_files:
+    - ./vars.yml
+
+  tasks:
+  # Настройка репликации на Master
+  - name: Configure Master server
+
+    # Блок MAIN_DB
+    when: inventory_hostname in groups['db_main']   
+    block:
+      - name: Ensure MariaDB is installed
+        ansible.builtin.package:
+          name: mariadb-server
+          state: present
+      
+      # Создание учетной записи для репликации с доступом только с реплик
+      - name: Create replication user on Master
+        community.mysql.mysql_user:
+          login_unix_socket: /var/run/mysqld/mysqld.sock
+          name: "{{ dbuser_replicator }}"
+          password: "{{ dbuser_replicator_pass }}"
+          host: "{{ item }}"
+          priv: '*.*:REPLICATION SLAVE'
+          state: present
+        loop: "{{ replication_host }}"  
+
+      # - name: Copy config
+      #   template:
+      #     src: 50-server-master.cnf
+      #     dest: /etc/mysql/mariadb.conf.d/50-server.cnf
+      #   # notify:
+      #   # - Restart MariaDB Service    
+
+      - name: "Config: Set server-id"
+        lineinfile:
+          dest: /etc/mysql/mariadb.conf.d/50-server.cnf
+          regexp: "^ *#* *server-id"
+          line: "server-id = {{ db_server_id }}"
+          backup: yes
+        #notify: 'Restart MariaDB Service'
+
+      # Блокировка  таблиц
+      - name: Lock tables on Master
+        command: "mysql -u root -e 'FLUSH TABLES WITH READ LOCK;'"
+        changed_when: false
+
+      # Наличие БД
+
+
+      # Создание дампа репликации
+      - name: Create sql-dump db {{ nc_database }}
+        shell: "mysqldump -u root {{ nc_database }} > {{ mysql_dump_file_rep}}"
+        args:
+          warn: no
+        changed_when: false
+
+      # Включение binlog режима
+      - name: "Config: Enable binlog"
+        lineinfile:
+          dest: /etc/mysql/mariadb.conf.d/50-server.cnf
+          regexp: "^ *#* *log_bin"
+          line: "log_bin = /var/log/mysql/mysql-bin.log"
+          backup: yes
+        when: db_server_id == 1
+        notify: 'Restart MariaDB Service'        
+
+      - name: (Master) Reset binlog
+        command: '/usr/bin/mysql -u root -e "RESET MASTER"'
+
+    # Конец блока MAIN_DB -------------------------------------------------------------------------------------------------------
+      
+  - name: Get MariaDB master state
+    community.mysql.mysql_info:
+      login_unix_socket: /var/run/mysqld/mysqld.sock
+      filter: master_status
+    register: db_master_status
+
+  - debug:
+      msg: "{{ db_server_id }} - {{ db_master_status.master_status }}"
+    when: db_debug|default(False) == True
+
+
+  - name: "(Maybe) Restart MariaDB"
+    meta: flush_handlers
+
+
+  - name: Get MariaDB master state
+    community.mysql.mysql_info:
+      login_unix_socket: /var/run/mysqld/mysqld.sock
+      filter: master_status
+    register: db_master_status_new
+
+
+  - debug:
+      msg: "{{ db_server_id }} - {{ db_master_status_new.master_status }}"
+    when: db_debug|default(False) == True
+
+
+  - name: (Master) Reset binlog
+    command: '/usr/bin/mysql -u root -e "RESET MASTER"'
+    when: db_server_id == 1 and db_master_status.master_status == {}
+
+
+  - name: "(Slave) Get status"
+    community.mysql.mysql_replication:
+      login_unix_socket: /var/run/mysqld/mysqld.sock
+      mode: getslave
+    register: db_slave_status
+
+
+  # - debug:
+  #     var: db_slave_status
+  #   when: db_debug|default(False) == True
+
+  # Проверка существования БД - должна быть перед заливкой
+  - name: "Check if the database {{ nc_database }} exists"
+    mysql_db:
+      login_unix_socket: /var/run/mysqld/mysqld.sock
+      name: "{{ nc_database }}"
+      state: present
+
+  # Импорт дампа репликации
+  - name: Import sql-dump db {{ nc_database }}
+    shell: "mysql -u root {{ nc_database }} < {{ mysql_dump_file_rep }}"
+    args:
+      warn: no
+   # changed_when: false 
+
+  - name: "(Slave) Setup replication"
+    # command: '/usr/bin/mysql -u root -e "CHANGE MASTER TO master_host=\"{{ hostvars["db1"]["ansible_default_ipv4"].address }}\", master_user=\"{{ dbuser_replicator }}\", master_password=\"{{ dbuser_replicator_pass }}\", master_use_gtid=current_pos"'
+    command: '/usr/bin/mysql -u root -e "CHANGE MASTER TO master_host=\"{{ master_host }}\", master_user=\"{{ dbuser_replicator }}\", master_password=\"{{ dbuser_replicator_pass }}\", master_use_gtid=current_pos"'
+    when: db_server_id != 1 and db_slave_status.Slave_IO_Running|default("No") == "No"
+    notify: 'Restart MariaDB Service'
+
+  - debug:
+      msg: "master_host= {{ master_host }}"
+    when: db_debug|default(False) == True
+
+  - name: "(Slave) Start slave"
+    community.mysql.mysql_replication:
+      login_unix_socket: /var/run/mysqld/mysqld.sock
+      mode: startslave
+    when: db_server_id != 1 and db_slave_status.Slave_IO_Running|default("No") == "No"
+
+  handlers: 
+    - name: Restart MariaDB Service
+      service:
+        name: mariadb
+        state: restarted
+        enabled: yes

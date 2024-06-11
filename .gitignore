@@ -10592,3 +10592,4 @@ PROJECT1/.vagrant/machines/xxx/virtualbox/index_uuid
 PROJECT1/.vagrant/machines/xxx/virtualbox/private_key
 PROJECT1/.vagrant/machines/xxx/virtualbox/synced_folders
 PROJECT1/.vagrant/machines/xxx/virtualbox/vagrant_cwd
+PROJECT1/ansible/files/nextcloud_replicate.sql

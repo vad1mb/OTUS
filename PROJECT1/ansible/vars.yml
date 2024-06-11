@@ -23,11 +23,12 @@ nc_database: nextcloud
 mysql_nextcloud_user: ncuser
 mysql_nextcloud_user_pass: ncuser
 db_nc_access_hosts:                   
-#  - 192.168.10.21
+  - 192.168.10.21
   - 192.168.10.22
-  - 192.168.10.50
+#  - 192.168.10.50
 
 mysql_dump_file: /vagrant/ansible/files/nextcloud.sql
+mysql_dump_file_rep: /vagrant/ansible/files/nextcloud_replicate.sql
 
 # For debug
 db_admin: root
@@ -44,7 +45,7 @@ dbuser_replicator_pass: replicator
 master_host: 192.168.10.31            # Master: только один!
 replication_host:                     # Slave: может быть несколько
   - 192.168.10.32
-#  - 192.168.10.33
+  - 192.168.10.50
 
 
 

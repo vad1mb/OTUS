@@ -29,7 +29,7 @@
   loop: "{{ db_nc_access_hosts }}"
   notify:
   - flush priveleges
-  when: nc_db_check.rowcount[0] == 0
+#  when: nc_db_check.rowcount[0] == 0    ## НЕ СТАВИТЬ!!!
 
 - name: Import MySQL dump nextcloud
   community.mysql.mysql_db:

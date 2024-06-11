@@ -11,4 +11,7 @@
 {{ hostvars[item].ansible_all_ipv4_addresses | ansible.netcommon.ipaddr(network) | first }} {{ hostvars[item].ansible_hostname }}.local
 {% endif %}
 {% endfor %}
-{{nc_url}} {{ hostvars['app0']['ansible_host'] }}
+
+{% for host in groups['front'] %}
+{{ hostvars[host]['ansible_host'] }} {{ nc_url }}
+{% endfor %}

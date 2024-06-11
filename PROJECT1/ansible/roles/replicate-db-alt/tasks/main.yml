@@ -31,6 +31,7 @@
     priv: '*.*:REPLICATION SLAVE'
     state: present
   loop: "{{ replication_host }}"
+  notify: flush priveleges
 
 # - name: MariaDB create replication user
 #   mysql_user:
@@ -54,8 +55,8 @@
   when: db_debug|default(False) == True
 
 
-- name: "(Maybe) Restart MariaDB"
-  meta: flush_handlers
+# - name: "(Maybe) Restart MariaDB"
+#   meta: flush_handlers
 
 
 - name: Get MariaDB master state
