@@ -1,7 +1,7 @@
 ansible_ssh_user: ans
 ansible_ssh_private_key_file: /home/vagrant/.ssh/id_ed25519
 
-# Подавление запроса fingeprint
+### Подавление запроса fingeprint
 ansible_ssh_extra_args: '-o StrictHostKeyChecking=no'
 
 ## Monitoring
@@ -17,28 +17,20 @@ ssl_certificate_key: /vagrant/ansible/key/private.key
 ## App
 # remote_archive_path: /vagrant/ansible/nextcloud_files.bz2
 nc_data_files: /data
+# Web servers access to db              
+db_nc_access_hosts:     
+  - 192.168.10.21
+  - 192.168.10.22
+#  - 192.168.10.50
 
 ## Databases
 nc_database: nextcloud
 mysql_nextcloud_user: ncuser
 mysql_nextcloud_user_pass: ncuser
-db_nc_access_hosts:                   
-  - 192.168.10.21
-  - 192.168.10.22
-#  - 192.168.10.50
-
 mysql_dump_file: /vagrant/ansible/files/nextcloud.sql
 mysql_dump_file_rep: /vagrant/ansible/files/nextcloud_replicate.sql
 
-# For debug
-db_admin: root
-db_admin_pass: root
-db_admin_access_hosts:
-  - 127.0.0.1       # localhost
-  - 192.168.10.99   # Ansible
-  - 192.168.10.1    # Main host (for debug)
-
-# Replication db
+## Replication db
 db_debug: true                        # Debug true|false
 dbuser_replicator: replicator
 dbuser_replicator_pass: replicator
@@ -47,5 +39,10 @@ replication_host:                     # Slave: может быть нескол�
   - 192.168.10.32
   - 192.168.10.50
 
-
-
+# For debug
+db_admin: root
+db_admin_pass: root
+db_admin_access_hosts:
+  - 127.0.0.1       # localhost
+  - 192.168.10.99   # Ansible
+  - 192.168.10.1    # Main host (for debug)

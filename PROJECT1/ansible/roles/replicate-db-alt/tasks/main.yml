@@ -4,25 +4,17 @@
     state: started
     enabled: yes
 
+# Установка server-id 
 - name: "Config: Set server-id"
   lineinfile:
     dest: /etc/mysql/mariadb.conf.d/50-server.cnf
     regexp: "^ *#* *server-id"
     line: "server-id = {{ db_server_id }}"
-    backup: yes
-  notify: 'Restart MariaDB Service'
+    # backup: yes
+  notify: Restart MariaDB Service
 
-
-- name: "Config: Enable binlog"
-  lineinfile:
-    dest: /etc/mysql/mariadb.conf.d/50-server.cnf
-    regexp: "^ *#* *log_bin"
-    line: "log_bin = /var/log/mysql/mysql-bin.log"
-    backup: yes
-  when: db_server_id == 1
-  notify: 'Restart MariaDB Service'
-
-- name: Create replication user on Master
+# Создание пользователя для репликации на Master
+- name: Create replication user {{ dbuser_replicator }} on Master
   community.mysql.mysql_user:
     login_unix_socket: /var/run/mysqld/mysqld.sock
     name: "{{ dbuser_replicator }}"
@@ -31,51 +23,43 @@
     priv: '*.*:REPLICATION SLAVE'
     state: present
   loop: "{{ replication_host }}"
+  when: db_server_id == 1
   notify: flush priveleges
 
-# - name: MariaDB create replication user
-#   mysql_user:
-#     name: "{{ dbuser_replicator }}"
-#     password: "{{ dbuser_replicator_pass }}"
-#     priv: '*.*:REPLICATION SLAVE'
-#     host: "%"
-#     state: present
-#   notify: 'Restart MariaDB Service'
+# Копируем config файл для Master c включеным binlog
+- name: Copy config Master Server with Enable binlog
+  template:
+    src: 50-server-master.cnf.j2
+    dest: /etc/mysql/mariadb.conf.d/50-server.cnf
+  when: db_server_id == 1
+  notify: Restart MariaDB Service         # 🔴 Странно, но хендлер не срабатывает
 
+# Применяем конфигурацию
+- name: Restart MariaDB Service
+  service:
+    name: mariadb
+    state: restarted
+    enabled: yes  
 
+#-----------------------------------------------
+
+# Читаем статус Master-а. Master вернет параметры, другие - ничего
 - name: Get MariaDB master state
   community.mysql.mysql_info:
     login_unix_socket: /var/run/mysqld/mysqld.sock
     filter: master_status
   register: db_master_status
 
-
 - debug:
     msg: "{{ db_server_id }} - {{ db_master_status.master_status }}"
   when: db_debug|default(False) == True
 
+# # Если это мастер, но параметры не выдает то делаем reset для binlog    ❓ Этот шаг будет всегда пропускаться?
+# - name: "(Master) Reset binlog"
+#   command: '/usr/bin/mysql -u root -e "RESET MASTER"'
+#   when: db_server_id == 1 and db_master_status.master_status == {}
 
-# - name: "(Maybe) Restart MariaDB"
-#   meta: flush_handlers
-
-
-- name: Get MariaDB master state
-  community.mysql.mysql_info:
-    login_unix_socket: /var/run/mysqld/mysqld.sock
-    filter: master_status
-  register: db_master_status_new
-
-
-# - debug:
-#     msg: "{{ db_server_id }} - {{ db_master_status_new.master_status }}"
-#   when: db_debug|default(False) == True
-
-
-- name: "(Master) Reset binlog"
-  command: '/usr/bin/mysql -u root -e "RESET MASTER"'
-  when: db_server_id == 1 and db_master_status.master_status == {}
-
-
+# Читаем статус Slave-а. Если репликация настроена, то вернет Slave_IO_Running: Yes, иначе - No
 - name: "(Slave) Get status"
   community.mysql.mysql_replication:
     login_unix_socket: /var/run/mysqld/mysqld.sock
@@ -83,13 +67,12 @@
   register: db_slave_status
 
 
-# - debug:
-#     var: db_slave_status
-#   when: db_debug|default(False) == True
+- debug:
+    var: db_slave_status.Slave_IO_Running
+  when: db_debug|default(False) == True
 
-
+# Настройка репликации для Slave если репликации еще нет.
 - name: "(Slave) Setup replication"
-  # command: '/usr/bin/mysql -u root -e "CHANGE MASTER TO master_host=\"{{ hostvars["db1"]["ansible_default_ipv4"].address }}\", master_user=\"{{ dbuser_replicator }}\", master_password=\"{{ dbuser_replicator_pass }}\", master_use_gtid=current_pos"'
   command: '/usr/bin/mysql -u root -e "CHANGE MASTER TO master_host=\"{{ master_host }}\", master_user=\"{{ dbuser_replicator }}\", master_password=\"{{ dbuser_replicator_pass }}\", master_use_gtid=current_pos"'
   when: db_server_id != 1 and db_slave_status.Slave_IO_Running|default("No") == "No"
   notify: 'Restart MariaDB Service'
@@ -98,6 +81,7 @@
 #     msg: "master_host= {{ master_host }}"
 #   when: db_debug|default(False) == True
 
+# Запуск репликации для Slave если репликации еще нет.
 - name: "(Slave) Start slave"
   community.mysql.mysql_replication:
     login_unix_socket: /var/run/mysqld/mysqld.sock
