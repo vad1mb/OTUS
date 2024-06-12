@@ -65,7 +65,7 @@ bind-address            = 0.0.0.0
 # The following can be used as easy to replay backup logs or for replication.
 # note: if you are setting up a replication slave, see README.Debian about
 #       other settings you may need to change.
-#server-id              = 1
+server-id = 1
 #log_bin                = /var/log/mysql/mysql-bin.log
 expire_logs_days        = 10
 #max_binlog_size        = 100M
@@ -115,7 +115,7 @@ collation-server      = utf8mb4_general_ci
 
 # Replication - Master
 [mysqld]
-server-id                       = 1
+#server-id                       = 1
 report_host                     = master
 log_error                       = /var/log/mysql/error.log
 log_bin                         = /var/log/mysql/mariadb-bin.log

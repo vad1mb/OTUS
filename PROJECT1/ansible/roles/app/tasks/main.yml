@@ -98,3 +98,8 @@
     - Reload Apache
   when: not nextcloud_conf.stat.exists
 
+- name: 'Enable service Apache'
+  service:
+    name: apache2
+    state: started
+    enabled: yes
