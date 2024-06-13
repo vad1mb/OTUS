@@ -37,7 +37,7 @@ dbuser_replicator_pass: replicator
 master_host: 192.168.10.31            # Master: только один!
 replication_host:                     # Slave: может быть несколько
   - 192.168.10.32
-  - 192.168.10.50
+#  - 192.168.10.50
 
 # For debug
 db_admin: root

@@ -1,19 +1,20 @@
 ### Loki
 
-- name: Check if the archive file exists
-  ansible.builtin.stat:
-    path: "/opt/loki-linux-amd64.zip"
-  register: file_stat
+# - name: Check if the archive file exists
+#   ansible.builtin.stat:
+#     path: "/opt/loki-linux-amd64.zip"
+#   register: file_stat
 
-- name: Download loki
-  ansible.builtin.get_url:
-    url: https://github.com/grafana/loki/releases/download/v2.9.8/loki-linux-amd64.zip
-    dest: /opt/loki-linux-amd64.zip
-  when: not file_stat.stat.exists
+# - name: Download loki
+#   ansible.builtin.get_url:
+#     url: https://github.com/grafana/loki/releases/download/v2.9.8/loki-linux-amd64.zip
+#     dest: /opt/loki-linux-amd64.zip
+#   when: not file_stat.stat.exists
 
-- name: Extract an archive
+- name: Extract an archive loki
   ansible.builtin.unarchive:
-    src: /opt/loki-linux-amd64.zip
+    #src: /opt/loki-linux-amd64.zip
+    src: /vagrant/ansible/files/loki-linux-amd64.zip
     dest: /usr/local/bin
     extra_opts: ["-o"]  # Optional: overwrite existing files
     mode: '0555'  # Optional: set mode of extracted files

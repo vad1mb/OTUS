@@ -28,7 +28,7 @@
   notify:
   - flush priveleges
 
-- name: Create MySQL Admin User
+- name: Create MySQL Admin User for Debug
   community.mysql.mysql_user:
     login_unix_socket: /var/run/mysqld/mysqld.sock
     user: "{{ db_admin }}"
@@ -45,3 +45,43 @@
 #     name: mariadb
 #     state: restarted
 
+# ------------------------------------------------------------------------
+# Создание пользователя для репликации на Master
+- name: Create replication user {{ dbuser_replicator }} on Master
+  community.mysql.mysql_user:
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    name: "{{ dbuser_replicator }}"
+    password: "{{ dbuser_replicator_pass }}"
+    host: "{{ item }}"
+    priv: '*.*:REPLICATION SLAVE'
+    state: present
+  loop: "{{ replication_host }}"
+  when: db_server_id == 1
+  notify: flush priveleges
+
+# Копируем config файл для Master c включеным binlog
+- name: Copy config Master Server with Enable binlog
+  template:
+    src: 50-server-master.cnf.j2
+    dest: /etc/mysql/mariadb.conf.d/50-server.cnf
+  when: db_server_id == 1
+  notify: Restart MariaDB Service         # 🔴
+
+# Установка server-id для Slave
+- name: "Config: Set server-id for Slave"
+  lineinfile:
+    dest: /etc/mysql/mariadb.conf.d/50-server.cnf
+    regexp: "^ *#* *server-id"
+    line: "server-id = {{ db_server_id }}"
+    # backup: yes
+  when: db_server_id != 1
+  notify: Restart MariaDB Service  
+
+# # Применяем конфигурацию
+# - name: Restart MariaDB Service
+#   service:
+#     name: mariadb
+#     state: restarted
+#     enabled: yes  
+
+#-----------------------------------------------

@@ -10593,3 +10593,6 @@ PROJECT1/.vagrant/machines/xxx/virtualbox/private_key
 PROJECT1/.vagrant/machines/xxx/virtualbox/synced_folders
 PROJECT1/.vagrant/machines/xxx/virtualbox/vagrant_cwd
 PROJECT1/ansible/files/nextcloud_replicate.sql
+PROJECT1/ansible/files/promtail-linux-amd64.zip
+PROJECT1/ansible/files/loki-linux-amd64.zip
+PROJECT1/ansible/files/grafana.db_old.zip

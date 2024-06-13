@@ -1,11 +1,14 @@
-- name: Download promtail binary zip
-  get_url:
-    url: "{{ promtail_download_url }}"
-    dest: "/tmp/promtail-linux-amd64.zip"
+# Скачиваем promtail (Столкнулся с проблемой недоскачивания 🤷‍♀️)
+# - name: Download promtail binary zip
+#   get_url:
+#     url: "{{ promtail_download_url }}"
+#     dest: "/tmp/promtail-linux-amd64.zip"
+
 
 - name: Extract an archive
   ansible.builtin.unarchive:
-    src: "/tmp/promtail-linux-amd64.zip"
+    #src: "/tmp/promtail-linux-amd64.zip"
+    src: "/vagrant/ansible/files/promtail-linux-amd64.zip"
     dest: "/usr/local/bin"
     extra_opts: ["-o"]      # Optional: overwrite existing files
     mode: '0555'            # Optional: set mode of extracted files
