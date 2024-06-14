@@ -1,11 +1,7 @@
 # -*- mode: ruby -*-
 # vim: set ft=ruby :
 ansible_user = "ans"
-# work
 ssh_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEbrduEvsWILqNr45wV05HTX+4nMVwcr5CkQUtMbTcII"
-# home
-#ssh_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOvcTcrFTzhPvVAh9rjhQPH41UIFojMnZxYSD8tvJDer vagrant@ansible"
-
 
 MACHINES = {
   :ansible => {
@@ -84,7 +80,7 @@ Vagrant.configure("2") do |config|
           case boxname.to_s
 
           when "ansible"
-            box.vm.synced_folder "d:\\OTUS\\PROJECT1\\ansible\\", "/ansible", 
+            box.vm.synced_folder "d:\\OTUS\\PROJECT\\ansible\\", "/ansible", 
                 owner: "vagrant", group: "vagrant", 
                 mount_options: ["dmode=755", "fmode=644"],
                 disabled: false
