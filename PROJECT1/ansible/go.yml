@@ -29,9 +29,9 @@
 #   vars_files:
 #     - ./vars.yml
 #   roles:
-#     - replicate-db
+#     - replicate-db-old
 #   tags:
-#   - replicate-db
+#   - replicate-db-old
 
 # ALT Configure MariaDB Master-Slave Replication  
 # - hosts: db
@@ -39,9 +39,9 @@
 #   vars_files:
 #     - ./vars.yml
 #   roles:
-#     - replicate-db-alt
+#     - replicate-db
 #   tags:
-#   - replicate-db-alt
+#   - replicate-db
 
 # Настройка мастер-слейв репликации в MariaDB
 - hosts: db
@@ -50,7 +50,7 @@
   vars_files:
     - ./vars.yml
   roles: 
-    - replicate-db-alt
+    - replicate-db
   # tasks:
   #   - name: Проверка настроенной репликации или наличия базы данных nextcloud в Master DB
   #     shell: >
@@ -77,10 +77,10 @@
 
   #   - name: Replication on/off
   #     include_role:
-  #       name: replicate-db-alt
+  #       name: replicate-db
   #     when: replication.rc = 'false' and nc_db_check.rc = 'false'
   tags:
-  - replicate-db-alt  
+  - replicate-db
 
 # Database NEXTCLOUD
 - hosts: db_main
@@ -121,3 +121,13 @@
     - monitoring
   tags:
   - monitoring
+
+# Configure periodical create sql-dumps
+- hosts: db_slave
+  become: true
+  vars_files:
+    - ./vars.yml
+  roles:
+    - backup
+  tags:
+  - backup

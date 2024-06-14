@@ -1,0 +1,19 @@
+# Копируем скрипт для снятия sql-дампов
+- name: Copy script for create sql-dump
+  template:
+    src: db_nextcloud_sql_dump.sh.j2
+    dest: /usr/local/bin/db_nextcloud_sql_dump.sh
+    owner: root
+    group: root
+    mode: 0750
+  when: backup == True
+
+# Настройка CRON для периодического снятия SQL-дампов
+- name: Add job in CRON
+  cron:
+    name: Create SQL-dump
+    weekday: "{{ weekday }}"
+    hour: "{{ hour }}"     
+    minute: "{{ minute }}"
+    job: "/bin/bash /usr/local/bin/db_nextcloud_sql_dump.sh"
+    state: "{{ backup_state }}"

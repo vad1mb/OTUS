@@ -28,7 +28,7 @@ nc_database: nextcloud
 mysql_nextcloud_user: ncuser
 mysql_nextcloud_user_pass: ncuser
 mysql_dump_file: /vagrant/ansible/files/nextcloud.sql
-mysql_dump_file_rep: /vagrant/ansible/files/nextcloud_replicate.sql
+#mysql_dump_file_rep: /vagrant/ansible/files/nextcloud_replicate.sql  # Alternative
 
 ## Replication db
 db_debug: true                        # Debug true|false
@@ -38,6 +38,14 @@ master_host: 192.168.10.31            # Master: только один!
 replication_host:                     # Slave: может быть несколько
   - 192.168.10.32
 #  - 192.168.10.50
+
+## Backup
+dump_dir: /vagrant/ansible/files      # Директория для дампов
+# Расписание в формате CRON
+backup_state: absent                  # State: present or absent
+weekday: "*"
+hour: "*"
+minute: "*/15"
 
 # For debug
 db_admin: root
