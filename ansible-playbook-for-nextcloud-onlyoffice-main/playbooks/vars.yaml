@@ -1,9 +1,0 @@
-# Nextcloud vars
-nextcloud_url: https://download.nextcloud.com/server/releases/latest.zip
-mysql_nextcloud_user: nextcloud #database user
-mysql_nextcloud_password: testpassword #database password
-
-#onlyoffice_ext_port
-onlyoffice_ext_port: 8080
-
-ansible_ssh_extra_args: '-o StrictHostKeyChecking=no'
