@@ -42,10 +42,10 @@ replication_host:                     # Slave: может быть нескол�
 ## Backup
 dump_dir: /vagrant/ansible/files      # Директория для дампов
 # Расписание в формате CRON
-backup_state: absent                  # State: present or absent
+backup_state: present                  # State: present or absent
 weekday: "*"
 hour: "*"
-minute: "*/15"
+minute: "*/5"                         # Каждые 5 минут для демонстрации
 
 # For debug
 db_admin: root

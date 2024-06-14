@@ -10625,3 +10625,7 @@ PROJECT/.vagrant/machines/mon/virtualbox/private_key
 PROJECT/.vagrant/machines/mon/virtualbox/synced_folders
 PROJECT/.vagrant/machines/mon/virtualbox/vagrant_cwd
 PROJECT/ansible/files/grafana-enterprise_11.0.0_amd64.deb
+PROJECT/ansible/files/dump_nextcloud_2024-06-14_12.15.gz
+PROJECT/ansible/files/dump_nextcloud_2024-06-14_12.20.gz
+PROJECT/ansible/key/id_ed25519.pub
+PROJECT/ansible/key/id_ed25519
